@@ -16,6 +16,56 @@ export const getUser = async (id: number) =>
           },
         },
       },
+      experiences: {
+        select: {
+          experience: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+      weeks: {
+        select: {
+          week: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+      locations: {
+        select: {
+          location: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+      meeting_systems: {
+        select: {
+          meeting_system: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+      meeting_times: {
+        select: {
+          meeting_time: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
     },
   })
 

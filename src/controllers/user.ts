@@ -5,8 +5,13 @@ import {
   createPositionOnUser as _createPositionOnUser,
   deletePositionOnUserByUserId as _deletePositionOnUserByUserId,
 } from 'models/user'
-import { bundleResponseData, bundleResponseError } from 'utils/bundle'
+import {
+  bundleResponseData,
+  bundleResponseError,
+  bundleUser,
+} from 'utils/bundle'
 import { errorGenerator } from 'utils/generator'
+import { UserBundleType } from 'utils/type'
 
 export const getUser = async (req: Request, res: Response) => {
   try {
@@ -15,7 +20,9 @@ export const getUser = async (req: Request, res: Response) => {
     if (!user_id)
       throw bundleResponseError({ statusCode: 400, message: 'KEY_ERROR' })
     const user = await _getUser(user_id)
-    res.status(200).json(bundleResponseData({ data: user }))
+    if (!user) return
+    const data: UserBundleType = bundleUser(user)
+    res.status(200).json(bundleResponseData({ data }))
   } catch (err: any) {
     errorGenerator({
       res,
@@ -27,8 +34,8 @@ export const getUser = async (req: Request, res: Response) => {
 
 export const updateMe = async (req: Request, res: Response) => {
   try {
-    const user_id = 1
     const { name, link, intro, positions } = req.body
+    const user_id = 1
     if (!!name || !!link || !!intro) {
       await _updateUser(user_id, name, link, intro)
     }
@@ -39,7 +46,9 @@ export const updateMe = async (req: Request, res: Response) => {
       )
     }
     const user = await _getUser(user_id)
-    res.status(200).json(user)
+    if (!user) return
+    const data: UserBundleType = bundleUser(user)
+    res.status(200).json(bundleResponseData({ data }))
   } catch (err: any) {
     errorGenerator({
       res,
