@@ -4,6 +4,8 @@ import {
   UserType,
   WithIdNameType,
 } from 'utils/type'
+import qs from 'node:querystring'
+import { COOKIE_KEY } from 'utils/constant'
 
 export const bundleResponseData = ({
   data,
@@ -40,4 +42,13 @@ export const bundleUser = (user: UserType) => {
       bundleWithIdName(item.meeting_time),
     ),
   }
+}
+
+export const bundleCookieToObject = (cookie: string) => {
+  const cookieValues = cookie.replace(`${COOKIE_KEY}=`, '') as string
+  const cookieInfo = qs.parse(decodeURIComponent(cookieValues)) as {
+    user_id: string
+    from_date: string
+  }
+  return cookieInfo
 }

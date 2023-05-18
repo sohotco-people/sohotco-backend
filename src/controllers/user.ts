@@ -5,6 +5,7 @@ import {
   deletePositionOnUserByUserId,
 } from 'models/positions_on_users'
 import {
+  bundleCookieToObject,
   bundleResponseData,
   bundleResponseError,
   bundleUser,
@@ -31,6 +32,23 @@ import {
   createMeetingTimeOnUser,
   deleteMeetingTimeOnUserByUserId,
 } from 'models/meeting_times_on_users'
+
+export const getMe = async (req: Request, res: Response) => {
+  try {
+    const params = bundleCookieToObject(req.headers.cookie as string)
+    const user_id = Number(params.user_id)
+    const user = await _getUser(user_id)
+    if (!user) return
+    const data: UserBundleType = bundleUser(user)
+    res.status(200).json(bundleResponseData({ data }))
+  } catch (err: any) {
+    errorGenerator({
+      res,
+      statusCode: err.statusCode,
+      message: err.message,
+    })
+  }
+}
 
 export const getUser = async (req: Request, res: Response) => {
   try {
@@ -64,7 +82,8 @@ export const updateMe = async (req: Request, res: Response) => {
       meeting_systems,
       meeting_times,
     } = req.body
-    const user_id = 1
+    const params = bundleCookieToObject(req.headers.cookie as string)
+    const user_id = Number(params.user_id)
     if (!!name || !!link || !!intro) {
       await updateUser(user_id, name, link, intro)
     }
