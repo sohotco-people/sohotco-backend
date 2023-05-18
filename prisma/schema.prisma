@@ -9,6 +9,7 @@ datasource db {
 
 model User {
   id                 Int          @id @default(autoincrement())
+  kakao_id           String
   name               String
   link               String
   intro              String       @db.VarChar(1000)

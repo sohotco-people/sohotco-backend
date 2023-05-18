@@ -3,16 +3,16 @@ import { bundleResponseError } from 'utils/bundle'
 
 export const errorGenerator = ({
   res,
-  statusCode = 500,
+  status_code = 500,
   message = 'SEVER_ERROR',
 }: {
   res: Response
-  statusCode: number
+  status_code: number
   message: string
 }) => {
-  res.status(statusCode).json(
+  res.status(status_code).json(
     bundleResponseError({
-      statusCode,
+      status_code,
       message,
     }),
   )

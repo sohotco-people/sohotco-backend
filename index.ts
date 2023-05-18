@@ -19,7 +19,6 @@ app.use(cors())
 app.use(express.json())
 app.use(router)
 
-// app.use(routes)
 const server = http.createServer(app)
 const PORT = process.env.PORT
 

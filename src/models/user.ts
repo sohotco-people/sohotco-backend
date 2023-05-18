@@ -1,6 +1,18 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
+export const getUserByKakaoId = async (kakao_id: string) =>
+  await prisma.user.findMany({ where: { kakao_id }, select: { id: true } })
+
+export const createUser = async ({
+  kakao_id,
+  name,
+}: {
+  kakao_id: string
+  name: string
+}) =>
+  await prisma.user.create({ data: { kakao_id, name, link: '', intro: '' } })
+
 export const getUser = async (id: number) =>
   await prisma.user.findUnique({
     where: { id },

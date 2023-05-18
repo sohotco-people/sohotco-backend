@@ -5,21 +5,20 @@ import {
   WithIdNameType,
 } from 'utils/type'
 import qs from 'node:querystring'
-import { COOKIE_KEY } from 'utils/constant'
 
 export const bundleResponseData = ({
   data,
-  statusCode = 200,
+  status_code = 200,
   message = 'SUCCESS',
 }: ResponseDataType) => {
-  return { data, statusCode, message }
+  return { data, status_code, message }
 }
 
 export const bundleResponseError = ({
-  statusCode = 500,
+  status_code = 500,
   message = 'SEVER_ERROR',
 }: ResponseErrorType) => {
-  return { statusCode, message }
+  return { status_code, message }
 }
 
 export const bundleWithIdName = ({ id, name }: WithIdNameType) => {
@@ -45,7 +44,10 @@ export const bundleUser = (user: UserType) => {
 }
 
 export const bundleCookieToObject = (cookie: string) => {
-  const cookieValues = cookie.replace(`${COOKIE_KEY}=`, '') as string
+  const cookieValues = cookie.replace(
+    `${process.env.COOKIE_KEY}=`,
+    '',
+  ) as string
   const cookieInfo = qs.parse(decodeURIComponent(cookieValues)) as {
     user_id: string
     from_date: string

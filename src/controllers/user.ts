@@ -1,5 +1,9 @@
 import { Request, Response } from 'express'
-import { getUser as _getUser, updateUser } from 'models/user'
+import {
+  getUser as _getUser,
+  updateUser,
+  createUser as _createUser,
+} from 'models/user'
 import {
   createPositionOnUser,
   deletePositionOnUserByUserId,
@@ -42,10 +46,11 @@ export const getMe = async (req: Request, res: Response) => {
     const data: UserBundleType = bundleUser(user)
     res.status(200).json(bundleResponseData({ data }))
   } catch (err: any) {
+    const { status_code, message } = err
     errorGenerator({
       res,
-      statusCode: err.statusCode,
-      message: err.message,
+      status_code,
+      message,
     })
   }
 }
@@ -55,16 +60,17 @@ export const getUser = async (req: Request, res: Response) => {
     const { id } = req.params
     const user_id = Number(id)
     if (!user_id)
-      throw bundleResponseError({ statusCode: 400, message: 'KEY_ERROR' })
+      throw bundleResponseError({ status_code: 400, message: 'KEY_ERROR' })
     const user = await _getUser(user_id)
     if (!user) return
     const data: UserBundleType = bundleUser(user)
     res.status(200).json(bundleResponseData({ data }))
   } catch (err: any) {
+    const { status_code, message } = err
     errorGenerator({
       res,
-      statusCode: err.statusCode,
-      message: err.message,
+      status_code,
+      message,
     })
   }
 }
@@ -128,10 +134,11 @@ export const updateMe = async (req: Request, res: Response) => {
     const data: UserBundleType = bundleUser(user)
     res.status(200).json(bundleResponseData({ data }))
   } catch (err: any) {
+    const { status_code, message } = err
     errorGenerator({
       res,
-      statusCode: err.statusCode,
-      message: err.message,
+      status_code,
+      message,
     })
   }
 }
