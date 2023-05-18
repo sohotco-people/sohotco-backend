@@ -44,8 +44,9 @@ export const bundleUser = (user: UserType) => {
 }
 
 export const bundleCookieToObject = (cookie: string) => {
+  console.log(process.env.COOKIE_KEY)
   const cookieValues = cookie.replace(
-    `${process.env.COOKIE_KEY}=`,
+    `${process.env.COOKEY_KEY}=`,
     '',
   ) as string
   const cookieInfo = qs.parse(decodeURIComponent(cookieValues)) as {
