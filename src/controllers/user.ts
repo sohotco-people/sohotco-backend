@@ -36,12 +36,14 @@ import {
   createMeetingTimeOnUser,
   deleteMeetingTimeOnUserByUserId,
 } from 'models/meeting_times_on_users'
+import qs from 'querystring'
+import { COOKEY_KEY } from 'utils/constant'
 
 export const getMe = async (req: Request, res: Response) => {
   try {
     const params = bundleCookieToObject(req.headers.cookie as string)
-    const user_id = Number(params.user_id)
-    const user = await _getUser(user_id)
+    const { user_id } = qs.parse(params[COOKEY_KEY])
+    const user = await _getUser(Number(user_id))
     if (!user) return
     const data: UserBundleType = bundleUser(user)
     res.status(200).json(bundleResponseData({ data }))

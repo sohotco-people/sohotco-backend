@@ -5,6 +5,7 @@ import path from 'path'
 import cors from 'cors'
 import router from 'routes'
 import { PrismaClient } from '@prisma/client'
+import { PORT } from 'utils/constant'
 
 if (process.env.NODE_ENV === 'production') {
   dotenv.config({ path: path.join(`${__dirname}/.env.prod}`) })
@@ -20,7 +21,6 @@ app.use(express.json())
 app.use(router)
 
 const server = http.createServer(app)
-const PORT = process.env.PORT
 
 app.get('/ping', (req: Request, res: Response) =>
   res.json({ message: '/pong' }),

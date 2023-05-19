@@ -1,13 +1,15 @@
 import axios from 'axios'
 import { Request, Response } from 'express'
-import { createUser, getUser, getUserByKakaoId } from 'models/user'
+import { createUser, getUserByKakaoId } from 'models/user'
+import moment from 'moment'
+import { bundleResponseError } from 'utils/bundle'
 import {
-  bundleResponseData,
-  bundleResponseError,
-  bundleUser,
-} from 'utils/bundle'
+  CLIENT_BASE_URL,
+  COOKEY_KEY,
+  KAKAO_REDIRECT_URI,
+  KAKAO_REST_API_KEY,
+} from 'utils/constant'
 import { errorGenerator } from 'utils/generator'
-import { UserBundleType } from 'utils/type'
 
 export const oauthLogin = async (req: Request, res: Response) => {
   try {
@@ -19,8 +21,8 @@ export const oauthLogin = async (req: Request, res: Response) => {
       url: 'https://kauth.kakao.com/oauth/token',
       data: {
         grant_type: 'authorization_code',
-        client_id: process.env.KAKAO_REST_API_KEY,
-        redirect_uri: process.env.KAKAO_REDIRECT_URI,
+        client_id: KAKAO_REST_API_KEY,
+        redirect_uri: KAKAO_REDIRECT_URI,
         code,
       },
       headers: {
@@ -47,10 +49,11 @@ export const oauthLogin = async (req: Request, res: Response) => {
       const created_user = await createUser({ kakao_id, name: nickname })
       user_id = created_user.id
     }
-    const user = await getUser(user_id)
-    if (!user) return
-    const data: UserBundleType = bundleUser(user)
-    res.status(200).json(bundleResponseData({ data }))
+    res.cookie(COOKEY_KEY, `user_id=${user_id}`, {
+      expires: new Date(moment().add(1, 'M').format('YYYY-MM-DD HH:ss')),
+      httpOnly: true,
+    })
+    res.status(200).redirect(CLIENT_BASE_URL)
   } catch (err: any) {
     const { status_code, message } = err
     errorGenerator({

@@ -43,15 +43,15 @@ export const bundleUser = (user: UserType) => {
   }
 }
 
-export const bundleCookieToObject = (cookie: string) => {
-  console.log(process.env.COOKIE_KEY)
-  const cookieValues = cookie.replace(
-    `${process.env.COOKEY_KEY}=`,
-    '',
-  ) as string
-  const cookieInfo = qs.parse(decodeURIComponent(cookieValues)) as {
-    user_id: string
-    from_date: string
-  }
-  return cookieInfo
+export const bundleCookieToObject = (cookies: string) => {
+  let list: Record<string, string> = {}
+  const t = cookies.split(`;`).forEach(function (cookie) {
+    let [name, ...rest] = cookie.split(`=`)
+    name = name?.trim()
+    if (!name) return
+    const value = rest.join(`=`).trim()
+    if (!value) return
+    list[name] = decodeURIComponent(value)
+  })
+  return list
 }
