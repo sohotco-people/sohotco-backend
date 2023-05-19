@@ -43,6 +43,7 @@ export const getMe = async (req: Request, res: Response) => {
   try {
     const params = bundleCookieToObject(req.headers.cookie as string)
     const { user_id } = qs.parse(params[COOKEY_KEY])
+    if (!user_id) res.status(200).json(bundleResponseData({ data: null }))
     const user = await _getUser(Number(user_id))
     if (!user) return
     const data: UserBundleType = bundleUser(user)
