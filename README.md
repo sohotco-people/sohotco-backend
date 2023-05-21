@@ -1,7 +1,0 @@
-```
-PORT=8080
-CLIENT_BASE_URL=http:localhost:3000
-DATABASE_URL=mysql://root:world@localhost:3306/sohotco
-KAKAO_REDIRECT_URI=http://localhost:8080/login/oauth
-KAKAO_REST_API_KEY=56d382231684779a121b84fdb402a224
-COOKEY_KEY=SOHOTCO_OAUTH
