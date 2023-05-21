@@ -9,12 +9,11 @@ import {
   deletePositionOnUserByUserId,
 } from 'models/positions_on_users'
 import {
-  bundleCookieToObject,
   bundleResponseData,
   bundleResponseError,
   bundleUser,
 } from 'utils/bundle'
-import { errorGenerator } from 'utils/generator'
+import { errorGenerator } from 'utils/error'
 import { UserBundleType } from 'utils/type'
 import {
   createExperienceOnUser,
@@ -36,13 +35,11 @@ import {
   createMeetingTimeOnUser,
   deleteMeetingTimeOnUserByUserId,
 } from 'models/meeting_times_on_users'
-import qs from 'querystring'
-import { COOKEY_KEY } from 'utils/constant'
+import { getUserIdByCookie } from 'utils/format'
 
 export const getMe = async (req: Request, res: Response) => {
   try {
-    const params = bundleCookieToObject(req.headers.cookie as string)
-    const { user_id } = qs.parse(params[COOKEY_KEY])
+    const user_id = getUserIdByCookie(req.headers.cookie as string)
     if (!user_id) res.status(200).json(bundleResponseData({ data: null }))
     const user = await _getUser(Number(user_id))
     if (!user) return
@@ -63,7 +60,10 @@ export const getUser = async (req: Request, res: Response) => {
     const { id } = req.params
     const user_id = Number(id)
     if (!user_id)
-      throw bundleResponseError({ status_code: 400, message: 'KEY_ERROR' })
+      throw bundleResponseError({
+        status_code: 400,
+        message: 'key error (user_id)',
+      })
     const user = await _getUser(user_id)
     if (!user) return
     const data: UserBundleType = bundleUser(user)
@@ -91,8 +91,8 @@ export const updateMe = async (req: Request, res: Response) => {
       meeting_systems,
       meeting_times,
     } = req.body
-    const params = bundleCookieToObject(req.headers.cookie as string)
-    const user_id = Number(params.user_id)
+    const user_id = getUserIdByCookie(req.headers.cookie as string)
+    if (!user_id) res.status(200).json(bundleResponseData({ data: null }))
     if (!!name || !!link || !!intro) {
       await updateUser(user_id, name, link, intro)
     }

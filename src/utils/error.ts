@@ -4,7 +4,7 @@ import { bundleResponseError } from 'utils/bundle'
 export const errorGenerator = ({
   res,
   status_code = 500,
-  message = 'SEVER_ERROR',
+  message = 'server error',
 }: {
   res: Response
   status_code: number

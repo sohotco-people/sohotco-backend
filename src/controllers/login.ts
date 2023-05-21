@@ -9,13 +9,16 @@ import {
   KAKAO_REDIRECT_URI,
   KAKAO_REST_API_KEY,
 } from 'utils/constant'
-import { errorGenerator } from 'utils/generator'
+import { errorGenerator } from 'utils/error'
 
 export const oauthLogin = async (req: Request, res: Response) => {
   try {
     const { code } = req.query
     if (!code)
-      throw bundleResponseError({ status_code: 400, message: 'KEY_ERROR' })
+      throw bundleResponseError({
+        status_code: 400,
+        message: 'key error (code)',
+      })
     const oauth_token = await axios({
       method: 'post',
       url: 'https://kauth.kakao.com/oauth/token',
@@ -30,7 +33,8 @@ export const oauthLogin = async (req: Request, res: Response) => {
       },
     })
     const { access_token } = oauth_token.data
-    if (!access_token) throw bundleResponseError({ message: 'TOKEN_ERROR' })
+    if (!access_token)
+      throw bundleResponseError({ message: 'access token error' })
     const kakao_user = await axios({
       method: 'post',
       url: 'https://kapi.kakao.com/v2/user/me',
@@ -39,10 +43,16 @@ export const oauthLogin = async (req: Request, res: Response) => {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     })
+    if (!kakao_user)
+      throw bundleResponseError({ message: 'get kakao user error' })
     const kakao_id = String(kakao_user.data.id)
     const nickname = kakao_user.data.properties.nickname
+    if (!kakao_id || !nickname)
+      throw bundleResponseError({ message: 'key error (kakao_id | nickname)' })
     const user_by_kakao_id = await getUserByKakaoId(kakao_id)
     let user_id = 0
+    if (user_by_kakao_id.length > 1)
+      throw bundleResponseError({ message: 'duplication user error' })
     if (user_by_kakao_id.length > 0) {
       user_id = user_by_kakao_id[0].id
     } else {

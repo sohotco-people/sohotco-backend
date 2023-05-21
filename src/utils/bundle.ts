@@ -4,19 +4,18 @@ import {
   UserType,
   WithIdNameType,
 } from 'utils/type'
-import qs from 'node:querystring'
 
 export const bundleResponseData = ({
   data,
   status_code = 200,
-  message = 'SUCCESS',
+  message = 'success',
 }: ResponseDataType) => {
   return { data, status_code, message }
 }
 
 export const bundleResponseError = ({
   status_code = 500,
-  message = 'SEVER_ERROR',
+  message = 'server error',
 }: ResponseErrorType) => {
   return { status_code, message }
 }
