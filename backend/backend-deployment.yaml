@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sohotco-backend
+  labels:
+    app: sohotco-backend
+spec:
+  selector:
+    matchLabels:
+      app: sohotco-backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sohotco-backend
+    spec:
+      containers:
+      - name: sohotco-backend
+        image: 270112669095.dkr.ecr.ap-northeast-2.amazonaws.com/sohotco-backend:{tag}
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
