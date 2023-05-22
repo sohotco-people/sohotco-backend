@@ -3,7 +3,7 @@ import {
   ResponseErrorType,
   UserType,
   WithIdNameType,
-} from 'utils/type'
+} from '../../src/utils/type'
 
 export const bundleResponseData = ({
   data,

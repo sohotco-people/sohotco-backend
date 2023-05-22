@@ -1,5 +1,5 @@
 import { Response, Request } from 'express'
-import { errorGenerator } from 'utils/error'
+import { errorGenerator } from '../../src/utils/error'
 import {
   getWeeks as _getWeeks,
   getPositions as _getPositions,
@@ -7,8 +7,8 @@ import {
   getExperiences as _getExperiences,
   getMeetingSystems as _getMeetingSystems,
   getMeetingTimes as _getMeetingTimes,
-} from 'models/option'
-import { bundleResponseData } from 'utils/bundle'
+} from '../../src/models/option'
+import { bundleResponseData } from '../../src/utils/bundle'
 
 export const getWeeks = async (req: Request, res: Response) => {
   try {

@@ -1,17 +1,9 @@
-import dotenv from 'dotenv'
 import express, { Express, Request, Response } from 'express'
 import http from 'http'
-import path from 'path'
 import cors from 'cors'
-import router from 'routes'
+import router from './src/routes'
 import { PrismaClient } from '@prisma/client'
-import { PORT } from 'utils/constant'
-
-if (process.env.NODE_ENV === 'production') {
-  dotenv.config({ path: path.join(`${__dirname}/.env.prod}`) })
-} else {
-  dotenv.config({ path: path.join(`${__dirname}/.env.local`) })
-}
+import { PORT } from './src/utils/constant'
 
 const app: Express = express()
 const prisma = new PrismaClient()

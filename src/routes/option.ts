@@ -6,7 +6,7 @@ import {
   getMeetingTimes,
   getPositions,
   getWeeks,
-} from 'controllers/option'
+} from '../../src/controllers/option'
 const router = express.Router()
 
 // GET

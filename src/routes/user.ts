@@ -1,5 +1,5 @@
 import express from 'express'
-import { getMe, getUser, updateMe } from 'controllers/user'
+import { getMe, getUser, updateMe } from '../../src/controllers/user'
 const router = express.Router()
 
 // GET

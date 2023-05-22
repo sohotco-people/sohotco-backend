@@ -1,5 +1,5 @@
 import express from 'express'
-import { oauthLogin } from 'controllers/login'
+import { oauthLogin } from '../../src/controllers/login'
 const router = express.Router()
 
 // GET

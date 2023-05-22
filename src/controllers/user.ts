@@ -3,44 +3,45 @@ import {
   getUser as _getUser,
   updateUser,
   createUser as _createUser,
-} from 'models/user'
+} from '../../src/models/user'
 import {
   createPositionOnUser,
   deletePositionOnUserByUserId,
-} from 'models/positions_on_users'
+} from '../../src/models/positions_on_users'
 import {
   bundleResponseData,
   bundleResponseError,
   bundleUser,
-} from 'utils/bundle'
-import { errorGenerator } from 'utils/error'
-import { UserBundleType } from 'utils/type'
+} from '../../src/utils/bundle'
+import { errorGenerator } from '../../src/utils/error'
+import { UserBundleType } from '../../src/utils/type'
 import {
   createExperienceOnUser,
   deleteExperienceOnUserByUserId,
-} from 'models/experiences_on_users'
+} from '../../src/models/experiences_on_users'
 import {
   createWeekOnUser,
   deleteWeekOnUserByUserId,
-} from 'models/weeks_on_users'
+} from '../../src/models/weeks_on_users'
 import {
   createLocationsOnUser,
   deleteLocationOnUserByUserId,
-} from 'models/locations_on_users'
+} from '../../src/models/locations_on_users'
 import {
   createMeetingSystemOnUser,
   deleteMeetingSystemOnUserByUserId,
-} from 'models/meeting_systems_on_users'
+} from '../../src/models/meeting_systems_on_users'
 import {
   createMeetingTimeOnUser,
   deleteMeetingTimeOnUserByUserId,
-} from 'models/meeting_times_on_users'
-import { getUserIdByCookie } from 'utils/format'
+} from '../../src/models/meeting_times_on_users'
+import { getUserIdByCookie } from '../../src/utils/format'
 
 export const getMe = async (req: Request, res: Response) => {
   try {
     const user_id = getUserIdByCookie(req.headers.cookie as string)
-    if (!user_id) res.status(200).json(bundleResponseData({ data: null }))
+    if (!user_id)
+      return res.status(200).json(bundleResponseData({ data: null }))
     const user = await _getUser(Number(user_id))
     if (!user) return
     const data: UserBundleType = bundleUser(user)
@@ -65,7 +66,7 @@ export const getUser = async (req: Request, res: Response) => {
         message: 'key error (user_id)',
       })
     const user = await _getUser(user_id)
-    if (!user) return
+    if (!user) return res.status(200).json(bundleResponseData({ data: null }))
     const data: UserBundleType = bundleUser(user)
     res.status(200).json(bundleResponseData({ data }))
   } catch (err: any) {

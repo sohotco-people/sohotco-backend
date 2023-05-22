@@ -1,15 +1,15 @@
 import axios from 'axios'
 import { Request, Response } from 'express'
-import { createUser, getUserByKakaoId } from 'models/user'
+import { createUser, getUserByKakaoId } from '../models/user'
 import moment from 'moment'
-import { bundleResponseError } from 'utils/bundle'
+import { bundleResponseError } from '../../src/utils/bundle'
 import {
   CLIENT_BASE_URL,
   COOKEY_KEY,
   KAKAO_REDIRECT_URI,
   KAKAO_REST_API_KEY,
-} from 'utils/constant'
-import { errorGenerator } from 'utils/error'
+} from '../../src/utils/constant'
+import { errorGenerator } from '../../src/utils/error'
 
 export const oauthLogin = async (req: Request, res: Response) => {
   try {

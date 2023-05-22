@@ -1,5 +1,5 @@
 import { Response } from 'express'
-import { bundleResponseError } from 'utils/bundle'
+import { bundleResponseError } from '../../src/utils/bundle'
 
 export const errorGenerator = ({
   res,
