@@ -7,7 +7,8 @@
     "start": "node dist/index.js",
     "build": "tsc -p .",
     "dev": "nodemon --watch \"**/*.ts\" --exec \"ts-node\" index.ts",
-    "migrate": "npx prisma migrate dev --name init"
+    "migrate": "npx prisma migrate dev --name init",
+    "distribute": "npm i && tsc -p . && prisma generate && pm2 start dist/index.js --name sohotco-backend -i max"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,7 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "nodemon": "^2.0.22",
+    "pm2": "^5.3.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   },
