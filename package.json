@@ -8,7 +8,7 @@
     "build": "tsc -p .",
     "dev": "nodemon --watch \"**/*.ts\" --exec \"ts-node\" index.ts",
     "migrate": "npx prisma migrate dev --name init",
-    "distribute": "npm i && tsc -p . && prisma generate && pm2 start dist/index.js --name sohotco-backend -i max"
+    "distribute": "npm i && tsc -p . && prisma generate && pm2 del sohotco-backend && pm2 start dist/index.js --name sohotco-backend -i max"
   },
   "keywords": [],
   "author": "",
