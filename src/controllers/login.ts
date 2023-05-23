@@ -16,7 +16,7 @@ export const oauthLogin = async (req: Request, res: Response) => {
     if (!code)
       throw bundleResponseError({
         status: 400,
-        message: 'key error (code)',
+        message: 'key error code',
       })
     const oauth_token = await axios({
       method: 'post',
@@ -47,7 +47,7 @@ export const oauthLogin = async (req: Request, res: Response) => {
     const kakao_id = String(kakao_user.id)
     const nickname = kakao_user.properties.nickname
     if (!kakao_id || !nickname)
-      throw bundleResponseError({ message: 'key error (kakao_id | nickname)' })
+      throw bundleResponseError({ message: 'key error kakao_id or nickname' })
     const user_by_kakao_id = await getUserByKakaoId(kakao_id)
     let user_id = 0
     if (user_by_kakao_id.length > 1)

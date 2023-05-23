@@ -57,7 +57,7 @@ export const getUser = async (req: Request, res: Response) => {
     if (!user_id)
       throw bundleResponseError({
         status: 400,
-        message: 'key error (user_id)',
+        message: 'key error user_id',
       })
     const user = await _getUser(user_id)
     if (!user) return res.status(200).json(bundleResponseData({ data: null }))
