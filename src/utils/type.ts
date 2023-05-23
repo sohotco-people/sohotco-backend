@@ -1,11 +1,11 @@
 export interface ResponseDataType {
   data: Record<string, any> | null
-  status_code?: number
+  status?: number
   message?: string
 }
 
 export interface ResponseErrorType {
-  status_code?: number
+  status?: number
   message?: string
 }
 

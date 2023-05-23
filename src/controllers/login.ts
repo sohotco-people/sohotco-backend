@@ -1,7 +1,7 @@
 import axios from 'axios'
+import moment from 'moment'
 import { Request, Response } from 'express'
 import { createUser, getUserByKakaoId } from '../models/user'
-import moment from 'moment'
 import { bundleResponseError } from '../../src/utils/bundle'
 import {
   CLIENT_BASE_URL,
@@ -9,14 +9,13 @@ import {
   KAKAO_REDIRECT_URI,
   KAKAO_REST_API_KEY,
 } from '../../src/utils/constant'
-import { errorGenerator } from '../../src/utils/error'
 
 export const oauthLogin = async (req: Request, res: Response) => {
   try {
     const { code } = req.query
     if (!code)
       throw bundleResponseError({
-        status_code: 400,
+        status: 400,
         message: 'key error (code)',
       })
     const oauth_token = await axios({
@@ -29,10 +28,10 @@ export const oauthLogin = async (req: Request, res: Response) => {
         code,
       },
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
       },
-    })
-    const { access_token } = oauth_token.data
+    }).then(({ data }) => data)
+    const { access_token } = oauth_token
     if (!access_token)
       throw bundleResponseError({ message: 'access token error' })
     const kakao_user = await axios({
@@ -40,13 +39,13 @@ export const oauthLogin = async (req: Request, res: Response) => {
       url: 'https://kapi.kakao.com/v2/user/me',
       headers: {
         Authorization: `Bearer ${access_token}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
       },
-    })
+    }).then(({ data }) => data)
     if (!kakao_user)
       throw bundleResponseError({ message: 'get kakao user error' })
-    const kakao_id = String(kakao_user.data.id)
-    const nickname = kakao_user.data.properties.nickname
+    const kakao_id = String(kakao_user.id)
+    const nickname = kakao_user.properties.nickname
     if (!kakao_id || !nickname)
       throw bundleResponseError({ message: 'key error (kakao_id | nickname)' })
     const user_by_kakao_id = await getUserByKakaoId(kakao_id)
@@ -65,11 +64,6 @@ export const oauthLogin = async (req: Request, res: Response) => {
     })
     res.status(200).redirect(CLIENT_BASE_URL)
   } catch (err: any) {
-    const { status_code, message } = err
-    errorGenerator({
-      res,
-      status_code,
-      message,
-    })
+    res.send(err)
   }
 }

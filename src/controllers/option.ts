@@ -1,5 +1,4 @@
 import { Response, Request } from 'express'
-import { errorGenerator } from '../../src/utils/error'
 import {
   getWeeks as _getWeeks,
   getPositions as _getPositions,
@@ -16,12 +15,7 @@ export const getWeeks = async (req: Request, res: Response) => {
     if (!weeks) return
     res.status(200).json(bundleResponseData({ data: weeks }))
   } catch (err: any) {
-    const { status_code, message } = err
-    errorGenerator({
-      res,
-      status_code,
-      message,
-    })
+    res.status(err.status).json(err)
   }
 }
 
@@ -31,12 +25,7 @@ export const getPositions = async (req: Request, res: Response) => {
     if (!positions) return
     res.status(200).json(bundleResponseData({ data: positions }))
   } catch (err: any) {
-    const { status_code, message } = err
-    errorGenerator({
-      res,
-      status_code,
-      message,
-    })
+    res.status(err.status).json(err)
   }
 }
 
@@ -46,12 +35,7 @@ export const getLocations = async (req: Request, res: Response) => {
     if (!locations) return
     res.status(200).json(bundleResponseData({ data: locations }))
   } catch (err: any) {
-    const { status_code, message } = err
-    errorGenerator({
-      res,
-      status_code,
-      message,
-    })
+    res.status(err.status).json(err)
   }
 }
 
@@ -61,12 +45,7 @@ export const getExperience = async (req: Request, res: Response) => {
     if (!experiences) return
     res.status(200).json(bundleResponseData({ data: experiences }))
   } catch (err: any) {
-    const { status_code, message } = err
-    errorGenerator({
-      res,
-      status_code,
-      message,
-    })
+    res.status(err.status).json(err)
   }
 }
 
@@ -76,12 +55,7 @@ export const getMeetingTimes = async (req: Request, res: Response) => {
     if (!meeting_times) return
     res.status(200).json(bundleResponseData({ data: meeting_times }))
   } catch (err: any) {
-    const { status_code, message } = err
-    errorGenerator({
-      res,
-      status_code,
-      message,
-    })
+    res.status(err.status).json(err)
   }
 }
 
@@ -91,11 +65,6 @@ export const getMeetingSystems = async (req: Request, res: Response) => {
     if (!meeting_systems) return
     res.status(200).json(bundleResponseData({ data: meeting_systems }))
   } catch (err: any) {
-    const { status_code, message } = err
-    errorGenerator({
-      res,
-      status_code,
-      message,
-    })
+    res.status(err.status).json(err)
   }
 }

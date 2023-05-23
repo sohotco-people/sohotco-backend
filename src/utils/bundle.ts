@@ -7,17 +7,17 @@ import {
 
 export const bundleResponseData = ({
   data,
-  status_code = 200,
+  status = 200,
   message = 'success',
 }: ResponseDataType) => {
-  return { data, status_code, message }
+  return { data, status, message }
 }
 
 export const bundleResponseError = ({
-  status_code = 500,
+  status = 500,
   message = 'server error',
 }: ResponseErrorType) => {
-  return { status_code, message }
+  return { status, message }
 }
 
 export const bundleWithIdName = ({ id, name }: WithIdNameType) => {

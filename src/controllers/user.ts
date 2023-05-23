@@ -13,7 +13,6 @@ import {
   bundleResponseError,
   bundleUser,
 } from '../../src/utils/bundle'
-import { errorGenerator } from '../../src/utils/error'
 import { UserBundleType } from '../../src/utils/type'
 import {
   createExperienceOnUser,
@@ -47,12 +46,7 @@ export const getMe = async (req: Request, res: Response) => {
     const data: UserBundleType = bundleUser(user)
     res.status(200).json(bundleResponseData({ data }))
   } catch (err: any) {
-    const { status_code, message } = err
-    errorGenerator({
-      res,
-      status_code,
-      message,
-    })
+    res.status(err.status).json(err)
   }
 }
 
@@ -62,7 +56,7 @@ export const getUser = async (req: Request, res: Response) => {
     const user_id = Number(id)
     if (!user_id)
       throw bundleResponseError({
-        status_code: 400,
+        status: 400,
         message: 'key error (user_id)',
       })
     const user = await _getUser(user_id)
@@ -70,12 +64,7 @@ export const getUser = async (req: Request, res: Response) => {
     const data: UserBundleType = bundleUser(user)
     res.status(200).json(bundleResponseData({ data }))
   } catch (err: any) {
-    const { status_code, message } = err
-    errorGenerator({
-      res,
-      status_code,
-      message,
-    })
+    res.status(err.status).json(err)
   }
 }
 
@@ -138,11 +127,6 @@ export const updateMe = async (req: Request, res: Response) => {
     const data: UserBundleType = bundleUser(user)
     res.status(200).json(bundleResponseData({ data }))
   } catch (err: any) {
-    const { status_code, message } = err
-    errorGenerator({
-      res,
-      status_code,
-      message,
-    })
+    res.status(err.status).json(err)
   }
 }
