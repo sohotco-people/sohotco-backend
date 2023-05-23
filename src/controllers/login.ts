@@ -5,6 +5,7 @@ import { createUser, getUserByKakaoId } from '../models/user'
 import { bundleResponseError } from '../../src/utils/bundle'
 import {
   CLIENT_BASE_URL,
+  COOKEY_DOMAIN,
   COOKEY_KEY,
   KAKAO_REDIRECT_URI,
   KAKAO_REST_API_KEY,
@@ -61,6 +62,7 @@ export const oauthLogin = async (req: Request, res: Response) => {
     res.cookie(COOKEY_KEY, `user_id=${user_id}`, {
       expires: new Date(moment().add(1, 'M').format('YYYY-MM-DD HH:ss')),
       httpOnly: true,
+      // domain: COOKEY_DOMAIN,
     })
     res.status(200).redirect(CLIENT_BASE_URL)
   } catch (err: any) {
