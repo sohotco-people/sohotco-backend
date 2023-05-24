@@ -20,3 +20,6 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: sohotco-backend-configmap
