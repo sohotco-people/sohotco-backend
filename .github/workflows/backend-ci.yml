@@ -14,12 +14,7 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16.x]
 
     steps:
     - uses: actions/checkout@v3
@@ -44,8 +39,26 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+    
+
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: "argocd"
+        
+    - name: update yaml file
+      run: |
+        sed -i 's/{sohotco-backend-tag}/${{ github.sha }}/g' ./
+        cat ./backend/backend-deployment.yaml
   
+
+
+
   slackNotification:
+    needs: deploy
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
