@@ -51,7 +51,7 @@ jobs:
         
     - name: update yaml file
       run: |
-        sed -i 's/{sohotco-backend-tag}/${{ github.sha }}/g' ./
+        sed -i 's/{sohotco-backend-tag}/${{ github.sha }}/g' ./backend/backend-deployment.yaml
         cat ./backend/backend-deployment.yaml
   
 
