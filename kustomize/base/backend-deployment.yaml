@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sohotco-backend-deployment
+  labels:
+    app: sohotco-backend-deployment
+spec:
+  selector:
+    matchLabels:
+      app: sohotco-backend-deployment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sohotco-backend-deployment
+    spec:
+      containers:
+      - name: sohotco-backend
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: sohotco-backend-configmap

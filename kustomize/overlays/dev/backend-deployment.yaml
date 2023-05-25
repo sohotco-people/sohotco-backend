@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: sohotco-backend
-        image: 270112669095.dkr.ecr.ap-northeast-2.amazonaws.com/sohotco-backend:{sohotco-backend-tag}
+        image: sohotco-backend-image
         imagePullPolicy: Never
         ports:
         - containerPort: 8080

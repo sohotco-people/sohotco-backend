@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+bases:
+  - ../../base
+
+patchesStrategicMerge:
+  - backend-deployment.yaml
+resources:
+- backend-configmap.yaml
+- backend-deployment.yaml
+- backend-service.yaml
+images:
+- name: sohotco-backend-image
+  newName: 270112669095.dkr.ecr.ap-northeast-2.amazonaws.com/sohotco-backend
+  newTag: {sohotco-backend-tag}
