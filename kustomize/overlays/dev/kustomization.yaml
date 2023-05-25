@@ -6,8 +6,7 @@ bases:
 
 patchesStrategicMerge:
   - backend-deployment.yaml
-resources:
-- backend-deployment.yaml
+
 images:
 - name: sohotco-backend-image
   newName: 270112669095.dkr.ecr.ap-northeast-2.amazonaws.com/sohotco-backend
