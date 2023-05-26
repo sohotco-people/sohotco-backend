@@ -43,33 +43,32 @@ jobs:
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
 
-    # argocd 브랜치
+
     - uses: actions/checkout@v3
       with:
         ref: "argocd"
+        token: ${{ secrets.ACTION_TOKEN }}
 
     - name: Setup Kustomize
       uses: imranismail/setup-kustomize@v1
-        
+      
     - name: Update manifest file
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        echo $ECR_REGISTRY
-        echo $ECR_REPOSITORY
-        echo $IMAGE_TAG
         cd kustomize/overlays/dev/
         kustomize edit set image $APP_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         cat kustomization.yaml
 
-    # - name: Push Updated Image Tag
-    #   run: |
-    #     git config --global user.name "DoJun Park"
-    #     git config --global user.email "dojun527@naver.com"
-    #     git commit -am "feat: Update sohotco-backed-deployment image tag to ${{ github.sha }}"
-    #     git push origin argocd
+      - name: Push Updated Image Tag
+        run: |
+          git config --global user.name "DoJun Park"
+          git config --global user.email "dojun527@naver.com"
+          git add .
+          git commit -am "feat: Update sohotco-backed-deployment image tag to ${{ github.sha }}"
+          git push origin argocd
 
 
   slackNotification:
