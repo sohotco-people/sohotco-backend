@@ -47,14 +47,14 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         ref: "argocd"
 
     - name: Setup Kustomize
       uses: imranismail/setup-kustomize@v1
         
-    - name: update manifest file
+    - name: Update manifest file
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
@@ -71,7 +71,8 @@ jobs:
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+    
     - name: Slack Notification
       uses: rtCamp/action-slack-notify@v2
       env:
