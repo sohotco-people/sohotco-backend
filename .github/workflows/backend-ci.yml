@@ -60,8 +60,11 @@ jobs:
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
+        echo $ECR_REGISTRY
+        echo $ECR_REPOSITORY
+        echo $IMAGE_TAG
         cd kustomize/overlays/dev/
-        kustomize edit set image $APP_IMAGE:$IMAGE_TAG=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        kustomize edit set image $APP_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         cat kustomization.yaml
 
     # - name: Push Updated Image Tag
