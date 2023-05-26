@@ -13,14 +13,16 @@ model User {
   name               String
   link               String
   intro              String       @db.VarChar(1000)
+  created_at         DateTime     @default(now())
+  deleted_at         DateTime?
+
   positions          PositionsOnUsers[]
   experiences        ExperiencesOnUsers[]
   weeks              WeeksOnUsers[]
   locations          LocationsOnUsers[]
   meeting_systems    MeetingSystemsOnUsers[]
   meeting_times      MeetingTimesOnUsers[]
-  created_at         DateTime     @default(now())
-  deleted_at         DateTime?
+  project            Project?
 
   @@map("user")
 }
@@ -28,18 +30,21 @@ model User {
 model Position {
   id                 Int          @id @default(autoincrement())
   name               String
-  users              PositionsOnUsers[]
   created_at         DateTime     @default(now())
+
+  users              PositionsOnUsers[]
+  projects           PositionsOnProjects[]
 
   @@map("position")
 }
 
 model PositionsOnUsers {
-  user               User         @relation(fields: [user_id], references: [id])
   user_id            Int 
-  position           Position     @relation(fields: [position_id], references: [id])
   position_id        Int 
   created_at         DateTime     @default(now())
+
+  user               User         @relation(fields: [user_id], references: [id])
+  position           Position     @relation(fields: [position_id], references: [id])
 
   @@id([user_id, position_id])
   @@map("position_on_users")
@@ -48,18 +53,20 @@ model PositionsOnUsers {
 model Experience {
   id                 Int          @id @default(autoincrement())
   name               String
-  users              ExperiencesOnUsers[]
   created_at         DateTime     @default(now())
+
+  users              ExperiencesOnUsers[]
 
   @@map("experience")
 }
 
 model ExperiencesOnUsers {
-  user               User         @relation(fields: [user_id], references: [id])
   user_id            Int 
-  experience         Experience   @relation(fields: [experience_id], references: [id])
   experience_id      Int 
   created_at         DateTime     @default(now())
+
+  user               User         @relation(fields: [user_id], references: [id])
+  experience         Experience   @relation(fields: [experience_id], references: [id])
 
   @@id([user_id, experience_id])
   @@map("experiences_on_users")
@@ -69,18 +76,21 @@ model ExperiencesOnUsers {
 model Week {
   id                 Int          @id @default(autoincrement())
   name               String
-  users              WeeksOnUsers[]
   created_at         DateTime     @default(now())
+
+  users              WeeksOnUsers[]
+  projects           WeeksOnProjects[]
 
   @@map("week")
 }
 
 model WeeksOnUsers {
-  user               User         @relation(fields: [user_id], references: [id])
   user_id            Int 
-  week               Week         @relation(fields: [week_id], references: [id])
   week_id            Int 
   created_at         DateTime     @default(now())
+
+  user               User         @relation(fields: [user_id], references: [id])
+  week               Week         @relation(fields: [week_id], references: [id])
 
   @@id([user_id, week_id])
   @@map("weeks_on_users")
@@ -90,18 +100,20 @@ model WeeksOnUsers {
 model Location {
   id                 Int          @id @default(autoincrement())
   name               String
-  users              LocationsOnUsers[]
   created_at         DateTime     @default(now())
+
+  users              LocationsOnUsers[]
 
   @@map("location")
 }
 
 model LocationsOnUsers {
-  user               User          @relation(fields: [user_id], references: [id])
   user_id            Int 
-  location           Location      @relation(fields: [location_id], references: [id])
   location_id        Int 
   created_at         DateTime      @default(now())
+
+  user               User          @relation(fields: [user_id], references: [id])
+  location           Location      @relation(fields: [location_id], references: [id])
 
   @@id([user_id, location_id])
   @@map("locations_on_users")
@@ -110,18 +122,21 @@ model LocationsOnUsers {
 model MeetingSystem {
   id                 Int           @id @default(autoincrement())
   name               String
-  users              MeetingSystemsOnUsers[]
   created_at         DateTime     @default(now())
+
+  users              MeetingSystemsOnUsers[]
+  projects           MeetingSystemsOnProjects[]
 
   @@map("meeting_system")
 }
 
 model MeetingSystemsOnUsers {
-  user               User          @relation(fields: [user_id], references: [id])
   user_id            Int 
-  meeting_system     MeetingSystem @relation(fields: [meeting_system_id], references: [id])
   meeting_system_id  Int 
   created_at         DateTime      @default(now())
+
+  user               User          @relation(fields: [user_id], references: [id])
+  meeting_system     MeetingSystem @relation(fields: [meeting_system_id], references: [id])
 
   @@id([user_id, meeting_system_id])
   @@map("meeting_systems_on_users")
@@ -130,19 +145,90 @@ model MeetingSystemsOnUsers {
 model MeetingTime {
   id                 Int           @id @default(autoincrement())
   name               String
-  users              MeetingTimesOnUsers[]
   created_at         DateTime     @default(now())
+
+  users              MeetingTimesOnUsers[]
+  projects           MeetingTimesOnProjects[]
 
   @@map("meeting_time")
 }
 
 model MeetingTimesOnUsers {
-  user               User          @relation(fields: [user_id], references: [id])
   user_id            Int 
-  meeting_time       MeetingTime   @relation(fields: [meeting_time_id], references: [id])
   meeting_time_id    Int 
   created_at         DateTime      @default(now())
 
+  user               User          @relation(fields: [user_id], references: [id])
+  meeting_time       MeetingTime   @relation(fields: [meeting_time_id], references: [id])
+
   @@id([user_id, meeting_time_id])
   @@map("meeting_times_on_users")
+}
+
+model Project {
+  id                 Int           @id @default(autoincrement())
+  user_id            Int           @unique
+  name               String
+  intro              String
+  description        String
+  is_published       Boolean
+  created_at         DateTime      @default(now())
+  updated_at         DateTime?     
+
+  user               User          @relation(fields: [user_id], references: [id])
+
+  meeting_times      MeetingTimesOnProjects[]
+  meeting_systems    MeetingSystemsOnProjects[]
+  weeks              WeeksOnProjects[]
+  positions          PositionsOnProjects[]
+
+  @@map("project")
+}
+
+model MeetingTimesOnProjects {
+  project_id         Int 
+  meeting_time_id    Int 
+  created_at         DateTime      @default(now())
+
+  project            Project       @relation(fields: [project_id], references: [id])
+  meeting_time       MeetingTime   @relation(fields: [meeting_time_id], references: [id])
+
+  @@id([project_id, meeting_time_id])
+  @@map("meeting_times_on_projects")
+}
+
+model MeetingSystemsOnProjects {
+  project_id         Int 
+  meeting_system_id  Int 
+  created_at         DateTime      @default(now())
+
+  project            Project       @relation(fields: [project_id], references: [id])
+  meeting_system     MeetingSystem @relation(fields: [meeting_system_id], references: [id])
+
+  @@id([project_id, meeting_system_id])
+  @@map("meeting_systems_on_projects")
+}
+
+model WeeksOnProjects {
+  project_id         Int 
+  week_id            Int 
+  created_at         DateTime      @default(now())
+
+  project            Project       @relation(fields: [project_id], references: [id])
+  week               Week          @relation(fields: [week_id], references: [id])
+
+  @@id([project_id, week_id])
+  @@map("weeks_on_projects")
+}
+
+model PositionsOnProjects {
+  project_id         Int 
+  position_id        Int 
+  created_at         DateTime      @default(now())
+
+  project            Project       @relation(fields: [project_id], references: [id])
+  position           Position      @relation(fields: [position_id], references: [id])
+
+  @@id([project_id, position_id])
+  @@map("positions_on_projects")
 }
