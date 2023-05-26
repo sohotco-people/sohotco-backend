@@ -51,7 +51,7 @@ jobs:
         ref: "argocd"
 
     - name: Setup Kustomize
-        uses: imranismail/setup-kustomize@v1
+      uses: imranismail/setup-kustomize@v1
         
     - name: update manifest file
       env:
