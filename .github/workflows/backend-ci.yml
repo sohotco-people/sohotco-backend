@@ -64,12 +64,12 @@ jobs:
         kustomize edit set image $APP_IMAGE:$IMAGE_TAG=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         cat kustomization.yaml
 
-    - name: Push Updated Image Tag
-      run: |
-        git config --global user.name "DoJun Park"
-        git config --global user.email "dojun527@naver.com"
-        git commit -am "feat: Update sohotco-backed-deployment image tag to ${{ github.sha }}"
-        git push origin argocd
+    # - name: Push Updated Image Tag
+    #   run: |
+    #     git config --global user.name "DoJun Park"
+    #     git config --global user.email "dojun527@naver.com"
+    #     git commit -am "feat: Update sohotco-backed-deployment image tag to ${{ github.sha }}"
+    #     git push origin argocd
 
 
   slackNotification:
