@@ -3,8 +3,3 @@ kind: Kustomization
 
 bases:
   - ../../base
-
-images:
-- name: sohotco-backend-image
-  newName: 270112669095.dkr.ecr.ap-northeast-2.amazonaws.com/sohotco-backend
-  newTag: latest 
