@@ -10,7 +10,8 @@ on:
 env:
   AWS_REGION: ap-northeast-2
   ECR_REPOSITORY: sohotco-backend
-  
+  APP_IMAGE: sohotco-backend-image
+
 
 jobs:
   build:
@@ -39,7 +40,7 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-    
+  
 
   deploy:
     runs-on: ubuntu-latest
@@ -48,12 +49,19 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: "argocd"
+
+    - name: Setup Kustomize
+        uses: imranismail/setup-kustomize@v1
         
-    - name: update yaml file
+    - name: update manifest file
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
+        IMAGE_TAG: ${{ github.sha }}
       run: |
-        sed -i 's/{sohotco-backend-tag}/${{ github.sha }}/g' ./manifest/backend-deployment.yaml
-        cat ./manifest/backend-deployment.yaml
-  
+        cd kustomize/overlays/dev/
+        kustomize edit set image $APP_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        cat kustomization.yaml
 
 
 
