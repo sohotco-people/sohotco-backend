@@ -40,6 +40,10 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+    outputs:
+      ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+
   
 
   deploy:
@@ -56,7 +60,7 @@ jobs:
         
     - name: Update manifest file
       env:
-        ECR_REGISTRY: ${{ jobs.build.steps.login-ecr.outputs.registry }}
+        ECR_REGISTRY: ${{ needs.build.outputs.ECR_REGISTRY }}
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
