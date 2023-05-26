@@ -42,16 +42,8 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
-    outputs:
-      ECR_REGISTRY: ${{ steps.build-image.outputs.ECR_REGISTRY }}
 
-  
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    
-    steps:
+    # argocd 브랜치
     - uses: actions/checkout@v3
       with:
         ref: "argocd"
@@ -61,11 +53,10 @@ jobs:
         
     - name: Update manifest file
       env:
-        ECR_REGISTRY: ${{ needs.build.outputs.ECR_REGISTRY }}
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        echo ${{ needs.build.outputs.ECR_REGISTRY }}
         echo $ECR_REGISTRY
         echo $ECR_REPOSITORY
         echo $IMAGE_TAG
@@ -82,7 +73,7 @@ jobs:
 
 
   slackNotification:
-    needs: deploy
+    needs: build
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
