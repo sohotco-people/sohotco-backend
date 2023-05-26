@@ -43,6 +43,7 @@ jobs:
   
 
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     
     steps:
@@ -60,7 +61,7 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
       run: |
         cd kustomize/overlays/dev/
-        kustomize edit set image $APP_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        kustomize edit set image $APP_IMAGE:$IMAGE_TAG=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         cat kustomization.yaml
 
 
