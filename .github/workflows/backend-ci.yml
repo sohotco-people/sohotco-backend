@@ -65,11 +65,11 @@ jobs:
         cat kustomization.yaml
 
     - name: Push Updated Image Tag
-        run: |
-          git config --global user.name "DoJun Park"
-          git config --global user.email "dojun527@naver.com"
-          git commit -am "feat: Update sohotco-backed-deployment image tag to ${{ github.sha }}"
-          git push origin argocd
+      run: |
+        git config --global user.name "DoJun Park"
+        git config --global user.email "dojun527@naver.com"
+        git commit -am "feat: Update sohotco-backed-deployment image tag to ${{ github.sha }}"
+        git push origin argocd
 
 
   slackNotification:
