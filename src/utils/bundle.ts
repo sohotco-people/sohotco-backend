@@ -6,7 +6,7 @@ import {
 } from '../../src/utils/type'
 
 export const bundleResponseData = ({
-  data,
+  data = null,
   status = 200,
   message = 'success',
 }: ResponseDataType) => {

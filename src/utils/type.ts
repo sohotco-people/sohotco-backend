@@ -1,5 +1,5 @@
 export interface ResponseDataType {
-  data: Record<string, any> | null
+  data?: Record<string, any> | null
   status?: number
   message?: string
 }
