@@ -6,11 +6,17 @@ import {
   KAKAO_REST_API_KEY,
 } from '../../src/utils/constant'
 import { getKakaoUserByToken } from '../utils/hook'
+import { bundleResponseError } from '../utils/bundle'
 
 export const oauthLogin = async (req: Request, res: Response) => {
   try {
     const { code, state } = req.query
-    if (!code || !state) throw 'key error state or code'
+    if (!code || !state)
+      throw bundleResponseError({
+        status: 400,
+        message: 'key error state or code',
+      })
+
     const oauth_token = await axios({
       method: 'post',
       url: 'https://kauth.kakao.com/oauth/token',
@@ -24,17 +30,25 @@ export const oauthLogin = async (req: Request, res: Response) => {
         'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
       },
     }).then(({ data }) => data)
+
     const { access_token } = oauth_token
-    if (!access_token) throw 'access or refresh token error'
+    if (!access_token)
+      throw bundleResponseError({ message: 'access token error' })
+
     const kakao_user = await getKakaoUserByToken(access_token)
-    if (!kakao_user) throw 'get kakao user error'
+    if (!kakao_user)
+      throw bundleResponseError({ message: 'get kakao user error' })
+
     const kakao_id = String(kakao_user.id)
     const nickname = kakao_user.properties.nickname
-    if (!kakao_id || !nickname) throw 'key error kakao_id or nickname'
+    if (!kakao_id || !nickname)
+      throw bundleResponseError({ message: 'key error kakao_id or nickname' })
+
     const user = await getUserByKakaoId(kakao_id)
     if (!user) await createUser({ kakao_id, name: nickname })
+
     res.status(200).redirect(`${state}?access_token=${access_token}`)
   } catch (err: any) {
-    res.status(err.status).send(err)
+    res.status(err.status || 500).json(err)
   }
 }
