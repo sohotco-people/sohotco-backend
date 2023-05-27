@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id                 Int          @id @default(autoincrement())
-  kakao_id           String
+  kakao_id           String       
   name               String
   link               String
   intro              String       @db.VarChar(1000)
@@ -103,6 +103,7 @@ model Location {
   created_at         DateTime     @default(now())
 
   users              LocationsOnUsers[]
+  projects           LocationsOnProjects[]
 
   @@map("location")
 }
@@ -171,7 +172,7 @@ model Project {
   name               String
   intro              String
   description        String
-  is_published       Boolean
+  is_published       Boolean       @default(true)
   created_at         DateTime      @default(now())
   updated_at         DateTime?     
 
@@ -181,6 +182,7 @@ model Project {
   meeting_systems    MeetingSystemsOnProjects[]
   weeks              WeeksOnProjects[]
   positions          PositionsOnProjects[]
+  locations          LocationsOnProjects[]
 
   @@map("project")
 }
@@ -231,4 +233,16 @@ model PositionsOnProjects {
 
   @@id([project_id, position_id])
   @@map("positions_on_projects")
+}
+
+model LocationsOnProjects {
+  project_id         Int 
+  location_id        Int 
+  created_at         DateTime      @default(now())
+
+  project            Project       @relation(fields: [project_id], references: [id])
+  location           Location      @relation(fields: [location_id], references: [id])
+
+  @@id([project_id, location_id])
+  @@map("locations_on_projects")
 }

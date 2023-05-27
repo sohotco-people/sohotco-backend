@@ -35,6 +35,32 @@ export interface UserBundleType {
   meeting_times: WithIdNameType[]
 }
 
+export interface ProjectType {
+  id: number
+  user_id: number
+  name: string
+  intro: string
+  description: string
+  meeting_times: { meeting_time: WithIdNameType }[]
+  meeting_systems: { meeting_system: WithIdNameType }[]
+  weeks: { week: WithIdNameType }[]
+  positions: { position: WithIdNameType }[]
+  locations: { location: WithIdNameType }[]
+}
+
+export interface ProjectBundleType {
+  id: number
+  user_id: number
+  name: string
+  intro: string
+  description: string
+  meeting_times: WithIdNameType[]
+  meeting_systems: WithIdNameType[]
+  weeks: WithIdNameType[]
+  positions: WithIdNameType[]
+  locations: WithIdNameType[]
+}
+
 export interface WithIdNameType {
   id: number
   name: string

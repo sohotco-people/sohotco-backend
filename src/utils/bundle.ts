@@ -1,6 +1,8 @@
 import {
+  ProjectType,
   ResponseDataType,
   ResponseErrorType,
+  UserBundleType,
   UserType,
   WithIdNameType,
 } from '../../src/utils/type'
@@ -37,6 +39,21 @@ export const bundleUser = (user: UserType) => {
       bundleWithIdName(item.meeting_system),
     ),
     meeting_times: user.meeting_times.map((item) =>
+      bundleWithIdName(item.meeting_time),
+    ),
+  }
+}
+
+export const bundleProject = (project: ProjectType) => {
+  return {
+    ...project,
+    positions: project.positions.map((item) => bundleWithIdName(item.position)),
+    weeks: project.weeks.map((item) => bundleWithIdName(item.week)),
+    locations: project.locations.map((item) => bundleWithIdName(item.location)),
+    meeting_systems: project.meeting_systems.map((item) =>
+      bundleWithIdName(item.meeting_system),
+    ),
+    meeting_times: project.meeting_times.map((item) =>
       bundleWithIdName(item.meeting_time),
     ),
   }

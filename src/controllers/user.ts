@@ -36,25 +36,11 @@ import {
   createMeetingTimeOnUser,
   deleteMeetingTimeOnUserByUserId,
 } from '../../src/models/meeting_times_on_users'
-import { getAccessTokenByCookie } from '../../src/utils/format'
-import { getKakaoUserByToken } from '../utils/hook'
+import { getUserByCookieAccessToken } from '../utils/hook'
 
 export const getMe = async (req: Request, res: Response) => {
   try {
-    const access_token = getAccessTokenByCookie(req.headers.cookie as string)
-    if (!access_token)
-      throw bundleResponseData({ status: 201, message: 'no user permissions' })
-
-    const kakao_user = await getKakaoUserByToken(access_token)
-    if (!kakao_user)
-      throw bundleResponseError({ message: 'get kakao user error' })
-
-    const kakao_id = String(kakao_user.id)
-    if (!kakao_id) throw bundleResponseError({ message: 'key error kakao_id' })
-
-    const user = await getUserByKakaoId(kakao_id)
-    if (!user)
-      throw bundleResponseData({ status: 201, message: 'no user permissions' })
+    const user = await getUserByCookieAccessToken(req.headers.cookie as string)
 
     const data: UserBundleType = bundleUser(user)
 
@@ -97,18 +83,7 @@ export const updateMe = async (req: Request, res: Response) => {
       meeting_systems,
       meeting_times,
     } = req.body
-    const access_token = getAccessTokenByCookie(req.headers.cookie as string)
-    if (!access_token)
-      throw bundleResponseData({ status: 201, message: 'no user permissions' })
-
-    const kakao_user = await getKakaoUserByToken(access_token)
-
-    const kakao_id = String(kakao_user.id)
-    if (!kakao_id) throw bundleResponseError({ message: 'key error kakao_id' })
-
-    const _user = await getUserByKakaoId(kakao_id)
-    if (!_user)
-      throw bundleResponseData({ status: 201, message: 'no user permissions' })
+    const _user = await getUserByCookieAccessToken(req.headers.cookie as string)
 
     const user_id = _user.id
 
@@ -172,18 +147,7 @@ export const updateMe = async (req: Request, res: Response) => {
 
 export const deleteMe = async (req: Request, res: Response) => {
   try {
-    const access_token = getAccessTokenByCookie(req.headers.cookie as string)
-    if (!access_token)
-      throw bundleResponseData({ status: 201, message: 'no user permissions' })
-
-    const kakao_user = await getKakaoUserByToken(access_token)
-
-    const kakao_id = String(kakao_user.id)
-    if (!kakao_id) throw 'key error kakao_id'
-
-    const user = await getUserByKakaoId(kakao_id)
-    if (!user)
-      throw bundleResponseData({ status: 201, message: 'no user permissions' })
+    const user = await getUserByCookieAccessToken(req.headers.cookie as string)
 
     await deleteUser(user.id)
 

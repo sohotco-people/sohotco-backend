@@ -1,71 +1,11 @@
 import { PrismaClient } from '@prisma/client'
+import { getUserPrismaQuery } from '../utils/format'
 const prisma = new PrismaClient()
 
 export const getUserByKakaoId = async (kakao_id: string) =>
   await prisma.user.findFirst({
     where: { kakao_id, deleted_at: null },
-    include: {
-      positions: {
-        select: {
-          position: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
-      experiences: {
-        select: {
-          experience: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
-      weeks: {
-        select: {
-          week: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
-      locations: {
-        select: {
-          location: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
-      meeting_systems: {
-        select: {
-          meeting_system: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
-      meeting_times: {
-        select: {
-          meeting_time: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
-    },
+    select: getUserPrismaQuery,
   })
 
 export const createUser = async ({
@@ -80,68 +20,7 @@ export const createUser = async ({
 export const getUser = async (id: number) =>
   await prisma.user.findFirst({
     where: { id, deleted_at: null },
-    include: {
-      positions: {
-        select: {
-          position: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
-      experiences: {
-        select: {
-          experience: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
-      weeks: {
-        select: {
-          week: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
-      locations: {
-        select: {
-          location: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
-      meeting_systems: {
-        select: {
-          meeting_system: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
-      meeting_times: {
-        select: {
-          meeting_time: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
-    },
+    select: getUserPrismaQuery,
   })
 
 export const updateUser = async ({
