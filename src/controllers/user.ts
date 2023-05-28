@@ -15,7 +15,7 @@ import {
   bundleResponseError,
   bundleUser,
 } from '../../src/utils/bundle'
-import { UserBundleType } from '../../src/utils/type'
+import { UserBundleType, UserRequestType } from '../../src/utils/type'
 import {
   createExperienceOnUser,
   deleteExperienceOnUserByUserId,
@@ -82,7 +82,7 @@ export const updateMe = async (req: Request, res: Response) => {
       locations,
       meeting_systems,
       meeting_times,
-    } = req.body
+    }: UserRequestType = req.body
     const _user = await getUserByCookieAccessToken(req.headers.cookie as string)
 
     const user_id = _user.id
@@ -93,44 +93,37 @@ export const updateMe = async (req: Request, res: Response) => {
 
     if (!!positions) {
       await deletePositionOnUserByUserId({ user_id })
-      await positions.forEach((position_id: number) =>
-        createPositionOnUser({ user_id, position_id }),
-      )
+      for (const position_id of positions)
+        await createPositionOnUser({ user_id, position_id })
     }
 
     if (!!experiences) {
       await deleteExperienceOnUserByUserId({ user_id })
-      await experiences.forEach((experience_id: number) =>
-        createExperienceOnUser({ user_id, experience_id }),
-      )
+      for (const experience_id of experiences)
+        await createExperienceOnUser({ user_id, experience_id })
     }
 
     if (!!weeks) {
       await deleteWeekOnUserByUserId({ user_id })
-      await weeks.forEach((week_id: number) =>
-        createWeekOnUser({ user_id, week_id }),
-      )
+      for (const week_id of weeks) await createWeekOnUser({ user_id, week_id })
     }
 
     if (!!locations) {
       await deleteLocationOnUserByUserId({ user_id })
-      await locations.forEach((location_id: number) =>
-        createLocationsOnUser({ user_id, location_id }),
-      )
+      for (const location_id of locations)
+        await createLocationsOnUser({ user_id, location_id })
     }
 
     if (!!meeting_systems) {
       await deleteMeetingSystemOnUserByUserId({ user_id })
-      await meeting_systems.forEach((meeting_system_id: number) =>
-        createMeetingSystemOnUser({ user_id, meeting_system_id }),
-      )
+      for (const meeting_system_id of meeting_systems)
+        await createMeetingSystemOnUser({ user_id, meeting_system_id })
     }
 
     if (!!meeting_times) {
       await deleteMeetingTimeOnUserByUserId({ user_id })
-      await meeting_times.forEach((meeting_time_id: number) =>
-        createMeetingTimeOnUser({ user_id, meeting_time_id }),
-      )
+      for (const meeting_time_id of meeting_times)
+        await createMeetingTimeOnUser({ user_id, meeting_time_id })
     }
 
     const user = await _getUser(user_id)

@@ -12,11 +12,7 @@ export const createMeetingTimesOnProjects = async ({
     data: { project_id, meeting_time_id },
   })
 
-export const deleteMeetingTimesOnProjects = async ({
-  project_id,
-}: {
-  project_id: number
-}) =>
+export const deleteMeetingTimesOnProjects = async (project_id: number) =>
   await prisma.meetingTimesOnProjects.deleteMany({
     where: { project_id },
   })

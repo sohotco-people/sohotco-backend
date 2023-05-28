@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { getUserPrismaQuery } from '../utils/format'
+import { UserBaseType } from '../utils/type'
 const prisma = new PrismaClient()
 
 export const getUserByKakaoId = async (kakao_id: string) =>
@@ -23,17 +24,7 @@ export const getUser = async (id: number) =>
     select: getUserPrismaQuery,
   })
 
-export const updateUser = async ({
-  id,
-  name,
-  link,
-  intro,
-}: {
-  id: number
-  name: string
-  link: string
-  intro: string
-}) =>
+export const updateUser = async ({ id, name, link, intro }: UserBaseType) =>
   await prisma.user.update({
     where: { id },
     data: { name, link, intro },

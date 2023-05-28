@@ -9,11 +9,26 @@ export interface ResponseErrorType {
   message?: string
 }
 
-export interface UserType {
-  id: number
+export interface WithIdNameType {
+  id?: number
   name: string
+}
+
+export interface UserBaseType extends WithIdNameType {
   link: string
   intro: string
+}
+
+export interface UserRequestType extends UserBaseType {
+  positions: number[]
+  experiences: number[]
+  weeks: number[]
+  locations: number[]
+  meeting_systems: number[]
+  meeting_times: number[]
+}
+
+export interface UserResponseType extends UserBaseType {
   positions: { position: WithIdNameType }[]
   experiences: { experience: WithIdNameType }[]
   weeks: { week: WithIdNameType }[]
@@ -22,11 +37,7 @@ export interface UserType {
   meeting_times: { meeting_time: WithIdNameType }[]
 }
 
-export interface UserBundleType {
-  id: number
-  name: string
-  link: string
-  intro: string
+export interface UserBundleType extends UserBaseType {
   positions: WithIdNameType[]
   experiences: WithIdNameType[]
   weeks: WithIdNameType[]
@@ -35,12 +46,13 @@ export interface UserBundleType {
   meeting_times: WithIdNameType[]
 }
 
-export interface ProjectType {
-  id: number
+export interface ProjectBaseType extends WithIdNameType {
   user_id: number
-  name: string
   intro: string
   description: string
+}
+
+export interface ProjectResponseType extends ProjectBaseType {
   meeting_times: { meeting_time: WithIdNameType }[]
   meeting_systems: { meeting_system: WithIdNameType }[]
   weeks: { week: WithIdNameType }[]
@@ -48,12 +60,7 @@ export interface ProjectType {
   locations: { location: WithIdNameType }[]
 }
 
-export interface ProjectBundleType {
-  id: number
-  user_id: number
-  name: string
-  intro: string
-  description: string
+export interface ProjectBundleType extends ProjectBaseType {
   meeting_times: WithIdNameType[]
   meeting_systems: WithIdNameType[]
   weeks: WithIdNameType[]
@@ -61,7 +68,10 @@ export interface ProjectBundleType {
   locations: WithIdNameType[]
 }
 
-export interface WithIdNameType {
-  id: number
-  name: string
+export interface ProjectRequestType extends ProjectBaseType {
+  meeting_times: number[]
+  meeting_systems: number[]
+  weeks: number[]
+  positions: number[]
+  locations: number[]
 }

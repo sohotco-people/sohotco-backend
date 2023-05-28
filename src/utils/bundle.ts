@@ -1,9 +1,9 @@
 import {
-  ProjectType,
+  ProjectResponseType,
   ResponseDataType,
   ResponseErrorType,
   UserBundleType,
-  UserType,
+  UserResponseType,
   WithIdNameType,
 } from '../../src/utils/type'
 
@@ -26,7 +26,7 @@ export const bundleWithIdName = ({ id, name }: WithIdNameType) => {
   return { id, name }
 }
 
-export const bundleUser = (user: UserType) => {
+export const bundleUser = (user: UserResponseType) => {
   return {
     ...user,
     positions: user.positions.map((item) => bundleWithIdName(item.position)),
@@ -44,7 +44,7 @@ export const bundleUser = (user: UserType) => {
   }
 }
 
-export const bundleProject = (project: ProjectType) => {
+export const bundleProject = (project: ProjectResponseType) => {
   return {
     ...project,
     positions: project.positions.map((item) => bundleWithIdName(item.position)),

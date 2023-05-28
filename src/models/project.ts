@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { getProjectPrismaQuery } from '../utils/format'
+import { ProjectBaseType } from '../utils/type'
 
 const prisma = new PrismaClient()
 
@@ -20,15 +21,10 @@ export const createProject = async ({
   name,
   intro,
   description,
-}: {
-  user_id: number
-  name: string
-  intro: string
-  description: string
-}) =>
+}: ProjectBaseType) =>
   await prisma.project.create({
     data: { user_id, name, intro, description },
-    include: getProjectPrismaQuery,
+    select: { id: true },
   })
 
 export const deleteProject = async (user_id: number) =>
