@@ -3,8 +3,8 @@ kind: ConfigMap
 metadata:
   name: sohotco-backend-configmap
 data:
-  PORT=8080
-  DATABASE_URL=mysql://root:sohotco123!@3.35.244.176:30036/sohotco
-  KAKAO_REDIRECT_URI=http://3.35.244.176:8080/login/oauth
-  KAKAO_REST_API_KEY=56d382231684779a121b84fdb402a224
-  COOKEY_KEY=SOHOTCO_OAUTH
+  PORT: 8080
+  DATABASE_URL: mysql://root:sohotco123!@3.35.244.176:30036/sohotco
+  KAKAO_REDIRECT_URI: http://3.35.244.176:8080/login/oauth
+  KAKAO_REST_API_KEY: 56d382231684779a121b84fdb402a224
+  COOKEY_KEY: SOHOTCO_OAUTH
