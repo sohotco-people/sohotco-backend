@@ -18,6 +18,8 @@ spec:
       - name: sohotco-backend
         image: sohotco-backend-image
         imagePullPolicy: Always
+        imagePullSecrets:
+        - name: regcred
         ports:
         - containerPort: 8080
         envFrom:
