@@ -56,7 +56,7 @@ export const getUser = async (req: Request, res: Response) => {
 
     const user_id = Number(id)
     if (!user_id)
-      throw bundleResponseError({ message: 'key error user_id', status: 400 })
+      throw bundleResponseError({ message: 'key error at params', status: 400 })
 
     const user = await _getUser(user_id)
     if (!user)

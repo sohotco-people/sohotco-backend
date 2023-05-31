@@ -9,7 +9,9 @@ import {
   deleteProject as _deleteProject,
   getProject as _getProject,
   getProjectByUserId as _getProjectByUserId,
+  updateProject as _updateProject,
   getProjectByUserId,
+  updatePublishProject,
 } from '../models/project'
 import { getUserByCookieAccessToken } from '../utils/hook'
 import { ProjectBundleType, ProjectRequestType } from '../utils/type'
@@ -77,8 +79,6 @@ export const createProject = async (req: Request, res: Response) => {
       positions,
       locations,
     }: ProjectRequestType = req.body
-    const user = await getUserByCookieAccessToken(req.headers.cookie as string)
-
     if (
       !name ||
       !intro ||
@@ -91,9 +91,11 @@ export const createProject = async (req: Request, res: Response) => {
     ) {
       throw bundleResponseError({
         status: 400,
-        message: 'request body key error',
+        message: 'key error at body',
       })
     }
+
+    const user = await getUserByCookieAccessToken(req.headers.cookie as string)
 
     const project_id = await _createProject({
       name,
@@ -102,7 +104,10 @@ export const createProject = async (req: Request, res: Response) => {
       user_id: user.id,
     }).then(({ id }) => id)
     if (!project_id)
-      throw bundleResponseError({ status: 500, message: 'project not created' })
+      throw bundleResponseError({
+        status: 500,
+        message: 'can not received project_id',
+      })
 
     for (const meeting_time_id of meeting_times)
       await createMeetingTimesOnProjects({ meeting_time_id, project_id })
@@ -119,7 +124,7 @@ export const createProject = async (req: Request, res: Response) => {
     if (!project)
       throw bundleResponseError({
         status: 500,
-        message: 'project not created',
+        message: 'can not received project',
       })
 
     const data: ProjectBundleType = bundleProject(project)
@@ -130,7 +135,7 @@ export const createProject = async (req: Request, res: Response) => {
   }
 }
 
-export const deleteProject = async (req: Request, res: Response) => {
+export const deleteMyProject = async (req: Request, res: Response) => {
   try {
     const user = await getUserByCookieAccessToken(req.headers.cookie as string)
 
@@ -147,6 +152,96 @@ export const deleteProject = async (req: Request, res: Response) => {
     await deleteMeetingTimesOnProjects(project.id)
     await deleteMeetingSystemsOnProjects(project.id)
     await _deleteProject(user.id)
+
+    res.status(200).json(bundleResponseData({}))
+  } catch (err: any) {
+    res.status(err.status || 500).json(err)
+  }
+}
+
+export const updateMyProject = async (req: Request, res: Response) => {
+  try {
+    const {
+      name,
+      intro,
+      description,
+      positions,
+      weeks,
+      locations,
+      meeting_systems,
+      meeting_times,
+    }: ProjectRequestType = req.body
+    if (
+      !name ||
+      !intro ||
+      !description ||
+      !meeting_times ||
+      !meeting_systems ||
+      !weeks ||
+      !locations ||
+      !positions
+    ) {
+      throw bundleResponseError({
+        status: 400,
+        message: 'key error at body',
+      })
+    }
+
+    const user = await getUserByCookieAccessToken(req.headers.cookie as string)
+
+    const project_id = await _updateProject({
+      user_id: user.id,
+      name,
+      intro,
+      description,
+    }).then(({ id }) => id)
+    if (!project_id)
+      throw bundleResponseError({
+        status: 500,
+        message: 'can not received project id',
+      })
+
+    await deleteWeeksOnProjects(project_id)
+    await deletePositionsOnProjects(project_id)
+    await deleteLocationsOnProjects(project_id)
+    await deleteMeetingTimesOnProjects(project_id)
+    await deleteMeetingSystemsOnProjects(project_id)
+
+    for (const meeting_time_id of meeting_times)
+      await createMeetingTimesOnProjects({ meeting_time_id, project_id })
+    for (const meeting_system_id of meeting_systems)
+      await createMeetingSystemsOnProjects({ meeting_system_id, project_id })
+    for (const week_id of weeks)
+      await createWeeksOnProjects({ week_id, project_id })
+    for (const location_id of locations)
+      await createLocationsOnProjects({ location_id, project_id })
+    for (const position_id of positions)
+      await createPositionsOnProjects({ position_id, project_id })
+
+    const project = await _getProject(project_id)
+    if (!project)
+      throw bundleResponseError({
+        status: 500,
+        message: 'can not received project',
+      })
+
+    const data: ProjectBundleType = bundleProject(project)
+
+    res.status(200).json(bundleResponseData({ data }))
+  } catch (err: any) {
+    res.status(err.status || 500).json(err)
+  }
+}
+
+export const updatePublishMyProject = async (req: Request, res: Response) => {
+  try {
+    const { is_published } = req.body
+    if (!is_published)
+      throw bundleResponseError({ status: 400, message: 'key error at body' })
+
+    const user = await getUserByCookieAccessToken(req.headers.cookie as string)
+
+    await updatePublishProject({ user_id: user.id, is_published })
 
     res.status(200).json(bundleResponseData({}))
   } catch (err: any) {

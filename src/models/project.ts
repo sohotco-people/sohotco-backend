@@ -29,3 +29,24 @@ export const createProject = async ({
 
 export const deleteProject = async (user_id: number) =>
   await prisma.project.delete({ where: { user_id } })
+
+export const updateProject = async ({
+  user_id,
+  name,
+  intro,
+  description,
+}: ProjectBaseType) =>
+  await prisma.project.update({
+    where: { user_id },
+    data: { name, intro, description, updated_at: new Date() },
+    select: { id: true },
+  })
+
+export const updatePublishProject = async ({
+  user_id,
+  is_published,
+}: {
+  user_id: number
+  is_published: boolean
+}) =>
+  await prisma.project.update({ where: { user_id }, data: { is_published } })

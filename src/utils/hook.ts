@@ -23,7 +23,7 @@ export const getUserByCookieAccessToken = async (cookie: string) => {
     throw bundleResponseError({ message: 'get kakao user error' })
 
   const kakao_id = String(kakao_user.id)
-  if (!kakao_id) throw bundleResponseError({ message: 'key error kakao_id' })
+  if (!kakao_id) throw bundleResponseError({ message: 'key error at body' })
 
   const user = await getUserByKakaoId(kakao_id)
   if (!user)

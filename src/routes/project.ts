@@ -1,9 +1,11 @@
 import express from 'express'
 import {
   createProject,
-  deleteProject,
+  deleteMyProject,
   getProject,
   getMyProject,
+  updateMyProject,
+  updatePublishMyProject,
 } from '../controllers/project'
 const router = express.Router()
 
@@ -14,7 +16,11 @@ router.get('/:id', getProject)
 // POST
 router.post('/me', createProject)
 
+// PUT
+router.put('/me', updateMyProject)
+router.put('/me/publish', updatePublishMyProject)
+
 // DELETE
-router.delete('/me', deleteProject)
+router.delete('/me', deleteMyProject)
 
 export default router
