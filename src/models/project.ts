@@ -50,3 +50,22 @@ export const updatePublishProject = async ({
   is_published: boolean
 }) =>
   await prisma.project.update({ where: { user_id }, data: { is_published } })
+
+export const getProjects = async () =>
+  await prisma.project.findMany({
+    where: { is_published: true },
+    select: {
+      id: true,
+      name: true,
+      intro: true,
+      views: true,
+      created_at: true,
+      updated_at: true,
+    },
+  })
+
+export const updateViewsProject = async (id: number) =>
+  await prisma.project.update({
+    where: { id },
+    data: { views: { increment: 1 } },
+  })

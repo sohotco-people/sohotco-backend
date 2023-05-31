@@ -172,6 +172,7 @@ model Project {
   name               String
   intro              String
   description        String
+  views              Int           @default(0)
   is_published       Boolean       @default(true)
   created_at         DateTime      @default(now())
   updated_at         DateTime?     

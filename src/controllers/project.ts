@@ -10,8 +10,10 @@ import {
   getProject as _getProject,
   getProjectByUserId as _getProjectByUserId,
   updateProject as _updateProject,
+  getProjects as _getProjects,
   getProjectByUserId,
   updatePublishProject,
+  updateViewsProject,
 } from '../models/project'
 import { getUserByCookieAccessToken } from '../utils/hook'
 import { ProjectBundleType, ProjectRequestType } from '../utils/type'
@@ -58,6 +60,8 @@ export const getProject = async (req: Request, res: Response) => {
     const project = await _getProject(Number(id))
     if (!project)
       throw bundleResponseError({ status: 400, message: 'not exist project' })
+
+    await updateViewsProject(Number(id))
 
     const data: ProjectBundleType = bundleProject(project)
 
@@ -236,7 +240,7 @@ export const updateMyProject = async (req: Request, res: Response) => {
 export const updatePublishMyProject = async (req: Request, res: Response) => {
   try {
     const { is_published } = req.body
-    if (!is_published)
+    if (typeof is_published === undefined)
       throw bundleResponseError({ status: 400, message: 'key error at body' })
 
     const user = await getUserByCookieAccessToken(req.headers.cookie as string)
@@ -244,6 +248,15 @@ export const updatePublishMyProject = async (req: Request, res: Response) => {
     await updatePublishProject({ user_id: user.id, is_published })
 
     res.status(200).json(bundleResponseData({}))
+  } catch (err: any) {
+    res.status(err.status || 500).json(err)
+  }
+}
+
+export const getProjects = async (req: Request, res: Response) => {
+  try {
+    const projects = await _getProjects()
+    res.status(200).json(bundleResponseData({ data: projects }))
   } catch (err: any) {
     res.status(err.status || 500).json(err)
   }

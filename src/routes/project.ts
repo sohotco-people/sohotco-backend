@@ -6,10 +6,12 @@ import {
   getMyProject,
   updateMyProject,
   updatePublishMyProject,
+  getProjects,
 } from '../controllers/project'
 const router = express.Router()
 
 // GET
+router.get('/', getProjects)
 router.get('/me', getMyProject)
 router.get('/:id', getProject)
 
