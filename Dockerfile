@@ -11,6 +11,7 @@ RUN npm install
 COPY ./ ./
 
 
+ENTRYPOINT ["/bin/sh", "-c", "/bin/bash"]
 #CMD ["npm", "run", "build"]
 #CMD ["npm", "run", "start"]
 
