@@ -10,19 +10,15 @@ WORKDIR /app
 # package.json과 package-lock.json 파일 이미지로 복사
 COPY package*.json ./
 
-# COPY 결과 확인
-RUN ls
-
 # npm 의존성 설치
 RUN npm install
 
 # 모든 파일 복사
 COPY ./ ./
 
-# COPY 결과 확인
-RUN ls
+# 빌드
+RUN npm run build
 
-ENTRYPOINT ["/bin/sh", "-c", "/bin/bash"]
-#CMD ["npm", "run", "build"]
-#CMD ["npm", "run", "start"]
+# 실행
+CMD ["npm", "start"]
 
