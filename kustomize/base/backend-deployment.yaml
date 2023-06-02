@@ -14,7 +14,7 @@ spec:
       labels:
         app: sohotco-backend-deployment
     spec:
-      revisionHistoryLimit: 1
+      revisionHistoryLimit: 0
       containers:
       - name: sohotco-backend
         image: sohotco-backend-image
