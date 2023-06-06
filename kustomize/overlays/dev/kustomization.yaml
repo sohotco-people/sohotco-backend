@@ -6,4 +6,4 @@ resources:
 images:
 - name: sohotco-backend-image
   newName: 270112669095.dkr.ecr.ap-northeast-2.amazonaws.com/sohotco-backend
-  newTag: 28b59da2c307507bb165d5f4ba37d297dc68e30b
+  newTag: 5b1aebac5e97230ae2cfaaa7d6696975586dd66c
