@@ -3,7 +3,6 @@ import {
   getUser as _getUser,
   updateUser,
   createUser as _createUser,
-  getUserByKakaoId,
   deleteUser,
 } from '../../src/models/user'
 import {
