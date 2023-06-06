@@ -20,7 +20,7 @@ COPY ./ ./
 RUN npm run build
 
 # prisma 환경 구성
-npx prisma generate
+RUN npx prisma generate
 
 # 실행
 CMD ["npm", "start"]
