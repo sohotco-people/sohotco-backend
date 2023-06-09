@@ -3,13 +3,13 @@ import http from 'http'
 import cors from 'cors'
 import router from './src/routes'
 import { PrismaClient } from '@prisma/client'
-import { PORT } from './src/utils/constant'
+import { CLIENT_URL, PORT } from './src/utils/constant'
 
 const app: Express = express()
 const prisma = new PrismaClient()
 
 app.use(express.json())
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }))
+app.use(cors({ origin: CLIENT_URL, credentials: true }))
 app.use(router)
 
 const server = http.createServer(app)
