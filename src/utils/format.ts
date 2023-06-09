@@ -2,7 +2,9 @@ import qs from 'querystring'
 import { SOHOTCO_OAUTH_KEY } from '../../src/utils/constant'
 
 export const getAccessTokenByCookie = (cookie: string) =>
-  qs.parse(cookie)[SOHOTCO_OAUTH_KEY] as string
+  qs.parse(
+    cookie.split('; ').filter((item) => item.includes(SOHOTCO_OAUTH_KEY))[0],
+  )[SOHOTCO_OAUTH_KEY] as string
 
 export const getUserPrismaQuery = {
   id: true,

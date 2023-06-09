@@ -15,6 +15,7 @@ export const getKakaoUserByToken = async (access_token: string) =>
 
 export const getUserByCookieAccessToken = async (cookie: string) => {
   const access_token = getAccessTokenByCookie(cookie)
+  // console.log(access_token)
   if (!access_token)
     throw bundleResponseData({ status: 201, message: 'no user permissions' })
 

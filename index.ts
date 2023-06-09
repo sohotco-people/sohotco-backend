@@ -8,8 +8,8 @@ import { PORT } from './src/utils/constant'
 const app: Express = express()
 const prisma = new PrismaClient()
 
-app.use(cors())
 app.use(express.json())
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }))
 app.use(router)
 
 const server = http.createServer(app)
