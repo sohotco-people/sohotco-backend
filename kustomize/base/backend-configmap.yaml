@@ -11,3 +11,4 @@ data:
   KAKAO_REST_API_KEY: "56d382231684779a121b84fdb402a224"
   SOHOTCO_OAUTH_KEY: "SOHOTCO_OAUTH"
   DATABASE_URL : "mysql://admin:sohotco123!@sohotco-db.cx2m6uauubyd.ap-northeast-2.rds.amazonaws.com:3306/sohotco"
+  CLIENT_URL : "sohotco-frontend.sohotco.svc.cluster.local"
