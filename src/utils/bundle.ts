@@ -2,7 +2,6 @@ import {
   ProjectResponseType,
   ResponseDataType,
   ResponseErrorType,
-  UserBundleType,
   UserResponseType,
   WithIdNameType,
 } from '../../src/utils/type'
@@ -42,6 +41,26 @@ export const bundleUser = (user: UserResponseType) => {
       bundleWithIdName(item.meeting_time),
     ),
   }
+}
+
+export const bundleUsers = (users: UserResponseType[]) => {
+  return users.map((user) => {
+    return {
+      ...user,
+      positions: user.positions.map((item) => bundleWithIdName(item.position)),
+      experiences: user.experiences.map((item) =>
+        bundleWithIdName(item.experience),
+      ),
+      weeks: user.weeks.map((item) => bundleWithIdName(item.week)),
+      locations: user.locations.map((item) => bundleWithIdName(item.location)),
+      meeting_systems: user.meeting_systems.map((item) =>
+        bundleWithIdName(item.meeting_system),
+      ),
+      meeting_times: user.meeting_times.map((item) =>
+        bundleWithIdName(item.meeting_time),
+      ),
+    }
+  })
 }
 
 export const bundleProject = (project: ProjectResponseType) => {

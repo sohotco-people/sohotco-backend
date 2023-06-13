@@ -3,6 +3,38 @@ import { getUserPrismaQuery } from '../utils/format'
 import { UserBaseType } from '../utils/type'
 const prisma = new PrismaClient()
 
+export const getUsers = async ({
+  positions,
+  experiences,
+  meeting_systems,
+  meeting_times,
+}: {
+  positions?: number[]
+  experiences?: number[]
+  meeting_systems?: number[]
+  meeting_times?: number[]
+}) => {
+  const query = {
+    positions: { some: { position_id: positions ? { in: positions } : {} } },
+    experiences: {
+      some: { experience_id: experiences ? { in: experiences } : {} },
+    },
+    meeting_systems: {
+      some: {
+        meeting_system_id: meeting_systems ? { in: meeting_systems } : {},
+      },
+    },
+    meeting_times: {
+      some: { meeting_time_id: meeting_times ? { in: meeting_times } : {} },
+    },
+  }
+
+  return await prisma.user.findMany({
+    where: query,
+    select: getUserPrismaQuery,
+  })
+}
+
 export const getUserByKakaoId = async (kakao_id: string) =>
   await prisma.user.findFirst({
     where: { kakao_id, deleted_at: null },

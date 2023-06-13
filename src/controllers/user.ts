@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import {
   getUser as _getUser,
+  getUsers as _getUsers,
   updateUser,
   createUser as _createUser,
   deleteUser,
@@ -13,6 +14,7 @@ import {
   bundleResponseData,
   bundleResponseError,
   bundleUser,
+  bundleUsers,
 } from '../../src/utils/bundle'
 import { UserBundleType, UserRequestType } from '../../src/utils/type'
 import {
@@ -62,6 +64,44 @@ export const getUser = async (req: Request, res: Response) => {
       throw bundleResponseData({ status: 201, message: 'no user permissions' })
 
     const data: UserBundleType = bundleUser(user)
+
+    res.status(200).json(bundleResponseData({ data }))
+  } catch (err: any) {
+    res.status(err.status || 500).json(err)
+  }
+}
+
+export const getUsers = async (req: Request, res: Response) => {
+  try {
+    const { positions, experiences, meeting_systems, meeting_times } = req.query
+
+    const _positions =
+      typeof positions === 'string' ? [positions] : (positions as string[])
+    const _experiences =
+      typeof experiences === 'string'
+        ? [experiences]
+        : (experiences as string[])
+    const _meeting_systems =
+      typeof meeting_systems === 'string'
+        ? [meeting_systems]
+        : (meeting_systems as string[])
+    const _meeting_times =
+      typeof meeting_times === 'string'
+        ? [meeting_times]
+        : (meeting_times as string[])
+
+    const params = {
+      positions: _positions ? _positions.map(Number) : undefined,
+      experiences: _experiences ? _experiences.map(Number) : undefined,
+      meeting_systems: _meeting_systems
+        ? _meeting_systems.map(Number)
+        : undefined,
+      meeting_times: _meeting_times ? _meeting_times.map(Number) : undefined,
+    }
+
+    const users = await _getUsers(params)
+
+    const data: UserBundleType[] = bundleUsers(users)
 
     res.status(200).json(bundleResponseData({ data }))
   } catch (err: any) {
