@@ -13,7 +13,6 @@ export const oauthLogin = async (req: Request, res: Response) => {
     const { code, state } = req.query
     if (!code || !state)
       throw bundleResponseError({
-        status: 400,
         message: 'key error state or code',
       })
 

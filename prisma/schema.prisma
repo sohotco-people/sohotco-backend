@@ -22,6 +22,7 @@ model User {
   locations          LocationsOnUsers[]
   meeting_systems    MeetingSystemsOnUsers[]
   meeting_times      MeetingTimesOnUsers[]
+  project_proposals  ProjectProposalsOnUsers[]
   project            Project?
 
   @@map("user")
@@ -184,6 +185,7 @@ model Project {
   weeks              WeeksOnProjects[]
   positions          PositionsOnProjects[]
   locations          LocationsOnProjects[]
+  project_proposals  ProjectProposalsOnUsers[]
 
   @@map("project")
 }
@@ -246,4 +248,17 @@ model LocationsOnProjects {
 
   @@id([project_id, location_id])
   @@map("locations_on_projects")
+}
+
+model ProjectProposalsOnUsers {
+  user_id            Int
+  project_id         Int
+  message            String
+  created_at         DateTime      @default(now())
+
+  user               User          @relation(fields: [user_id], references: [id])
+  project            Project       @relation(fields: [project_id], references: [id])
+
+  @@id([user_id, project_id])
+  @@map("project_proposals_on_users")
 }

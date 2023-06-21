@@ -42,8 +42,7 @@ export const getMyProject = async (req: Request, res: Response) => {
   try {
     const user = await getUserByCookieAccessToken(req.headers.cookie as string)
     const project = await _getProjectByUserId(user.id)
-    if (!project)
-      throw bundleResponseError({ status: 400, message: 'not exist project' })
+    if (!project) throw bundleResponseError({ message: 'not exist project' })
 
     const data: ProjectBundleType = bundleProject(project)
 
@@ -58,8 +57,7 @@ export const getProject = async (req: Request, res: Response) => {
     const { id } = req.params
 
     const project = await _getProject(Number(id))
-    if (!project)
-      throw bundleResponseError({ status: 400, message: 'not exist project' })
+    if (!project) throw bundleResponseError({ message: 'not exist project' })
 
     await updateViewsProject(Number(id))
 
@@ -94,7 +92,6 @@ export const createProject = async (req: Request, res: Response) => {
       !positions
     ) {
       throw bundleResponseError({
-        status: 400,
         message: 'key error at body',
       })
     }
@@ -109,7 +106,6 @@ export const createProject = async (req: Request, res: Response) => {
     }).then(({ id }) => id)
     if (!project_id)
       throw bundleResponseError({
-        status: 500,
         message: 'can not received project_id',
       })
 
@@ -127,7 +123,6 @@ export const createProject = async (req: Request, res: Response) => {
     const project = await _getProject(project_id)
     if (!project)
       throw bundleResponseError({
-        status: 500,
         message: 'can not received project',
       })
 
@@ -146,7 +141,6 @@ export const deleteMyProject = async (req: Request, res: Response) => {
     const project = await getProjectByUserId(user.id)
     if (!project)
       throw bundleResponseError({
-        status: 500,
         message: 'no projects to delete',
       })
 
@@ -186,7 +180,6 @@ export const updateMyProject = async (req: Request, res: Response) => {
       !positions
     ) {
       throw bundleResponseError({
-        status: 400,
         message: 'key error at body',
       })
     }
@@ -201,7 +194,6 @@ export const updateMyProject = async (req: Request, res: Response) => {
     }).then(({ id }) => id)
     if (!project_id)
       throw bundleResponseError({
-        status: 500,
         message: 'can not received project id',
       })
 
@@ -225,7 +217,6 @@ export const updateMyProject = async (req: Request, res: Response) => {
     const project = await _getProject(project_id)
     if (!project)
       throw bundleResponseError({
-        status: 500,
         message: 'can not received project',
       })
 
@@ -241,7 +232,7 @@ export const updatePublishMyProject = async (req: Request, res: Response) => {
   try {
     const { is_published } = req.body
     if (typeof is_published === undefined)
-      throw bundleResponseError({ status: 400, message: 'key error at body' })
+      throw bundleResponseError({ message: 'key error at body' })
 
     const user = await getUserByCookieAccessToken(req.headers.cookie as string)
 

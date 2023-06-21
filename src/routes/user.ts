@@ -5,6 +5,7 @@ import {
   updateMe,
   deleteMe,
   getUsers,
+  createProposal,
 } from '../../src/controllers/user'
 const router = express.Router()
 
@@ -18,5 +19,8 @@ router.put('/me', updateMe)
 
 // DELETE
 router.delete('/me', deleteMe)
+
+// POST
+router.post('/:user_id/project/:project_id/propose', createProposal)
 
 export default router

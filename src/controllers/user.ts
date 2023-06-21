@@ -38,6 +38,8 @@ import {
   deleteMeetingTimeOnUserByUserId,
 } from '../../src/models/meeting_times_on_users'
 import { getUserByCookieAccessToken } from '../utils/hook'
+import { getProjectByUserId } from '../models/project'
+import { createProposal as _createProposal } from '../models/project_proposals_on_users'
 
 export const getMe = async (req: Request, res: Response) => {
   try {
@@ -56,12 +58,11 @@ export const getUser = async (req: Request, res: Response) => {
     const { id } = req.params
 
     const user_id = Number(id)
-    if (!user_id)
-      throw bundleResponseError({ message: 'key error at params', status: 400 })
+    if (!user_id) throw bundleResponseError({ message: 'key error at params' })
 
     const user = await _getUser(user_id)
     if (!user)
-      throw bundleResponseData({ status: 201, message: 'no user permissions' })
+      throw bundleResponseData({ status: 201, message: 'not exist user' })
 
     const data: UserBundleType = bundleUser(user)
 
@@ -182,6 +183,24 @@ export const deleteMe = async (req: Request, res: Response) => {
     const user = await getUserByCookieAccessToken(req.headers.cookie as string)
 
     await deleteUser(user.id)
+
+    res.status(200).json(bundleResponseData({}))
+  } catch (err: any) {
+    res.status(err.status || 500).json(err)
+  }
+}
+
+export const createProposal = async (req: Request, res: Response) => {
+  try {
+    const user_id = Number(req.params.user_id)
+    const project_id = Number(req.params.project_id)
+    if (!user_id || !project_id)
+      throw bundleResponseError({ message: 'key error at params' })
+
+    const { message } = req.body
+    if (!message) throw bundleResponseError({ message: 'key error at body' })
+
+    await _createProposal({ user_id, project_id, message })
 
     res.status(200).json(bundleResponseData({}))
   } catch (err: any) {
