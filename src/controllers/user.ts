@@ -5,18 +5,24 @@ import {
   updateUser,
   createUser as _createUser,
   deleteUser,
+  getMyNews as _getMyNews,
 } from '../../src/models/user'
 import {
   createPositionOnUser,
   deletePositionOnUserByUserId,
 } from '../../src/models/positions_on_users'
 import {
+  bundleNews,
   bundleResponseData,
   bundleResponseError,
   bundleUser,
   bundleUsers,
 } from '../../src/utils/bundle'
-import { UserBundleType, UserRequestType } from '../../src/utils/type'
+import {
+  NewsBundleType,
+  UserBundleType,
+  UserRequestType,
+} from '../../src/utils/type'
 import {
   createExperienceOnUser,
   deleteExperienceOnUserByUserId,
@@ -38,7 +44,6 @@ import {
   deleteMeetingTimeOnUserByUserId,
 } from '../../src/models/meeting_times_on_users'
 import { getUserByCookieAccessToken } from '../utils/hook'
-import { getProjectByUserId } from '../models/project'
 import { createProposal as _createProposal } from '../models/project_proposals_on_users'
 
 export const getMe = async (req: Request, res: Response) => {
@@ -203,6 +208,23 @@ export const createProposal = async (req: Request, res: Response) => {
     await _createProposal({ user_id, project_id, message })
 
     res.status(200).json(bundleResponseData({}))
+  } catch (err: any) {
+    res.status(err.status || 500).json(err)
+  }
+}
+
+export const getMyNews = async (req: Request, res: Response) => {
+  try {
+    const user = await getUserByCookieAccessToken(req.headers.cookie as string)
+
+    const news = await _getMyNews({
+      user_id: user.id,
+      project_id: user.project?.id,
+    })
+
+    const data: NewsBundleType[] = bundleNews(news)
+
+    res.status(200).json(bundleResponseData({ data }))
   } catch (err: any) {
     res.status(err.status || 500).json(err)
   }

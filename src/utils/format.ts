@@ -12,6 +12,7 @@ export const getUserPrismaQuery = {
   link: true,
   intro: true,
   kakao_id: false,
+  project: true,
   positions: {
     select: {
       position: {

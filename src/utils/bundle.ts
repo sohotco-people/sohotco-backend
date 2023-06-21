@@ -1,4 +1,5 @@
 import {
+  NewsResponseType,
   ProjectResponseType,
   ResponseDataType,
   ResponseErrorType,
@@ -76,6 +77,24 @@ export const bundleProject = (project: ProjectResponseType) => {
       bundleWithIdName(item.meeting_time),
     ),
   }
+}
+
+export const bundleNews = (news: NewsResponseType[]) => {
+  return news.map((item) => {
+    const v = item.project_proposals.map((_item) => {
+      return {
+        user: {
+          id: _item.user.id,
+          name: _item.user.name,
+        },
+        project: {
+          id: _item.project.id,
+          name: _item.project.name,
+        },
+      }
+    })
+    return v[0]
+  })
 }
 
 export const bundleCookieToObject = (cookies: string) => {
