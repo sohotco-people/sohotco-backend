@@ -22,7 +22,6 @@ model User {
   locations          LocationsOnUsers[]
   meeting_systems    MeetingSystemsOnUsers[]
   meeting_times      MeetingTimesOnUsers[]
-  project_proposals  ProjectProposalsOnUsers[]
   project            Project?
 
   @@map("user")
@@ -171,8 +170,8 @@ model Project {
   id                 Int           @id @default(autoincrement())
   user_id            Int           @unique
   name               String
-  intro              String
-  description        String
+  intro              String        @db.VarChar(1000)
+  description        String       
   views              Int           @default(0)
   is_published       Boolean       @default(true)
   created_at         DateTime      @default(now())
@@ -185,7 +184,6 @@ model Project {
   weeks              WeeksOnProjects[]
   positions          PositionsOnProjects[]
   locations          LocationsOnProjects[]
-  project_proposals  ProjectProposalsOnUsers[]
 
   @@map("project")
 }
@@ -251,14 +249,15 @@ model LocationsOnProjects {
 }
 
 model ProjectProposalsOnUsers {
-  user_id            Int
+  id                 Int          @id @default(autoincrement())
+  requestor_id       Int
+  requestor_name     String
+  respondent_id      Int
+  respondent_name    String
   project_id         Int
   message            String
   created_at         DateTime      @default(now())
 
-  user               User          @relation(fields: [user_id], references: [id])
-  project            Project       @relation(fields: [project_id], references: [id])
 
-  @@id([user_id, project_id])
   @@map("project_proposals_on_users")
 }

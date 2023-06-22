@@ -65,27 +65,27 @@ export const updateUser = async ({ id, name, link, intro }: UserBaseType) =>
 export const deleteUser = async (id: number) =>
   await prisma.user.update({ where: { id }, data: { deleted_at: new Date() } })
 
-export const getMyNews = async ({
-  user_id,
-  project_id,
-}: {
-  user_id: number
-  project_id?: number
-}) =>
-  await prisma.user.findMany({
-    where: {
-      project_proposals: {
-        some: {
-          OR: [{ user_id }, { project_id }],
-        },
-      },
-    },
-    select: {
-      project_proposals: {
-        select: {
-          user: { select: { id: true, name: true } },
-          project: { select: { id: true, name: true } },
-        },
-      },
-    },
-  })
+// export const getMyNews = async ({
+//   user_id,
+//   project_id,
+// }: {
+//   user_id: number
+//   project_id?: number
+// }) =>
+//   await prisma.user.findMany({
+//     where: {
+//       project_proposals: {
+//         some: {
+//           OR: [{ user_id }, { project_id }],
+//         },
+//       },
+//     },
+//     select: {
+//       project_proposals: {
+//         select: {
+//           user: { select: { id: true, name: true } },
+//           project: { select: { id: true, name: true } },
+//         },
+//       },
+//     },
+//   })

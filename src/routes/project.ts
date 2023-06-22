@@ -7,6 +7,7 @@ import {
   updateMyProject,
   updatePublishMyProject,
   getProjects,
+  createProjectProposal,
 } from '../controllers/project'
 const router = express.Router()
 
@@ -17,6 +18,7 @@ router.get('/:id', getProject)
 
 // POST
 router.post('/me', createProject)
+router.post('/propose', createProjectProposal)
 
 // PUT
 router.put('/me', updateMyProject)

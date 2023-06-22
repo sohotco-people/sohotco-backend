@@ -37,6 +37,7 @@ import {
   createPositionsOnProjects,
   deletePositionsOnProjects,
 } from '../models/positions_on_projects'
+import { createProjectProposal as _createProjectProposal } from '../models/project_proposals_on_users'
 
 export const getMyProject = async (req: Request, res: Response) => {
   try {
@@ -248,6 +249,32 @@ export const getProjects = async (req: Request, res: Response) => {
   try {
     const projects = await _getProjects()
     res.status(200).json(bundleResponseData({ data: projects }))
+  } catch (err: any) {
+    res.status(err.status || 500).json(err)
+  }
+}
+
+export const createProjectProposal = async (req: Request, res: Response) => {
+  try {
+    const respondent_id = Number(req.body.user_id)
+    const respondent_name = req.body.user_name
+    const project_id = Number(req.body.project_id)
+    const message = req.body.message
+    if (!respondent_id || !respondent_name || !project_id || !message)
+      throw bundleResponseError({ message: 'key error at params' })
+
+    const user = await getUserByCookieAccessToken(req.headers.cookie as string)
+
+    await _createProjectProposal({
+      requestor_id: user.id,
+      requestor_name: user.name,
+      respondent_id,
+      respondent_name,
+      project_id,
+      message,
+    })
+
+    res.status(200).json(bundleResponseData({}))
   } catch (err: any) {
     res.status(err.status || 500).json(err)
   }

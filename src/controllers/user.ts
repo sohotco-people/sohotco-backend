@@ -5,24 +5,18 @@ import {
   updateUser,
   createUser as _createUser,
   deleteUser,
-  getMyNews as _getMyNews,
 } from '../../src/models/user'
 import {
   createPositionOnUser,
   deletePositionOnUserByUserId,
 } from '../../src/models/positions_on_users'
 import {
-  bundleNews,
   bundleResponseData,
   bundleResponseError,
   bundleUser,
   bundleUsers,
 } from '../../src/utils/bundle'
-import {
-  NewsBundleType,
-  UserBundleType,
-  UserRequestType,
-} from '../../src/utils/type'
+import { UserBundleType, UserRequestType } from '../../src/utils/type'
 import {
   createExperienceOnUser,
   deleteExperienceOnUserByUserId,
@@ -44,7 +38,7 @@ import {
   deleteMeetingTimeOnUserByUserId,
 } from '../../src/models/meeting_times_on_users'
 import { getUserByCookieAccessToken } from '../utils/hook'
-import { createProposal as _createProposal } from '../models/project_proposals_on_users'
+import { getProjectProposal } from '../models/project_proposals_on_users'
 
 export const getMe = async (req: Request, res: Response) => {
   try {
@@ -195,36 +189,14 @@ export const deleteMe = async (req: Request, res: Response) => {
   }
 }
 
-export const createProposal = async (req: Request, res: Response) => {
-  try {
-    const user_id = Number(req.params.user_id)
-    const project_id = Number(req.params.project_id)
-    if (!user_id || !project_id)
-      throw bundleResponseError({ message: 'key error at params' })
-
-    const { message } = req.body
-    if (!message) throw bundleResponseError({ message: 'key error at body' })
-
-    await _createProposal({ user_id, project_id, message })
-
-    res.status(200).json(bundleResponseData({}))
-  } catch (err: any) {
-    res.status(err.status || 500).json(err)
-  }
-}
-
+// TODO: 내 프로젝트 없을 때 정보 확인해야됨
 export const getMyNews = async (req: Request, res: Response) => {
   try {
     const user = await getUserByCookieAccessToken(req.headers.cookie as string)
 
-    const news = await _getMyNews({
-      user_id: user.id,
-      project_id: user.project?.id,
-    })
+    const news = await getProjectProposal(user.id)
 
-    const data: NewsBundleType[] = bundleNews(news)
-
-    res.status(200).json(bundleResponseData({ data }))
+    res.status(200).json(bundleResponseData({ data: news }))
   } catch (err: any) {
     res.status(err.status || 500).json(err)
   }

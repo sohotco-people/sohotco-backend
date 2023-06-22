@@ -75,15 +75,3 @@ export interface ProjectRequestType extends ProjectBaseType {
   positions: number[]
   locations: number[]
 }
-
-export interface NewsResponseType {
-  project_proposals: {
-    user: WithIdNameType
-    project: WithIdNameType
-  }[]
-}
-
-export interface NewsBundleType {
-  user: WithIdNameType
-  project: WithIdNameType
-}
