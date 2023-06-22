@@ -11,8 +11,8 @@ export const getProjectByUserId = async (user_id: number) =>
   })
 
 export const getProject = async (id: number) =>
-  await prisma.project.findUnique({
-    where: { id },
+  await prisma.project.findFirst({
+    where: { id, is_published: true },
     include: getProjectPrismaQuery,
   })
 
