@@ -47,7 +47,7 @@ model PositionsOnUsers {
   position           Position     @relation(fields: [position_id], references: [id])
 
   @@id([user_id, position_id])
-  @@map("position_on_users")
+  @@map("positions_on_users")
 }
 
 model Experience {
