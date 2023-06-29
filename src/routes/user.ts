@@ -5,12 +5,10 @@ import {
   updateMe,
   deleteMe,
   getUsers,
-  getMyNews,
 } from '../../src/controllers/user'
 const router = express.Router()
 
 // GET
-router.get('/me/news', getMyNews)
 router.get('/me', getMe)
 router.get('/:id', getUser)
 router.get('/', getUsers)

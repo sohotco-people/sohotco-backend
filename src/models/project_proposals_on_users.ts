@@ -27,7 +27,10 @@ export const createProjectProposal = async ({
     },
   })
 
-export const getProjectProposal = async (id: number) =>
+export const getProjectProposalByUserId = async (id: number) =>
   await prisma.projectProposalsOnUsers.findMany({
     where: { OR: [{ requestor_id: id }, { respondent_id: id }] },
   })
+
+export const getProjectProposal = async (id: number) =>
+  await prisma.projectProposalsOnUsers.findUnique({ where: { id } })

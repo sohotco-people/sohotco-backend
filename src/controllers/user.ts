@@ -38,7 +38,6 @@ import {
   deleteMeetingTimeOnUserByUserId,
 } from '../../src/models/meeting_times_on_users'
 import { getUserByCookieAccessToken } from '../utils/hook'
-import { getProjectProposal } from '../models/project_proposals_on_users'
 
 export const getMe = async (req: Request, res: Response) => {
   try {
@@ -184,19 +183,6 @@ export const deleteMe = async (req: Request, res: Response) => {
     await deleteUser(user.id)
 
     res.status(200).json(bundleResponseData({}))
-  } catch (err: any) {
-    res.status(err.status || 500).json(err)
-  }
-}
-
-// TODO: 내 프로젝트 없을 때 정보 확인해야됨
-export const getMyNews = async (req: Request, res: Response) => {
-  try {
-    const user = await getUserByCookieAccessToken(req.headers.cookie as string)
-
-    const news = await getProjectProposal(user.id)
-
-    res.status(200).json(bundleResponseData({ data: news }))
   } catch (err: any) {
     res.status(err.status || 500).json(err)
   }
